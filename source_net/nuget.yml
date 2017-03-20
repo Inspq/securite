@@ -1,0 +1,10 @@
+- include: mono.yml
+
+- name: Creer repertoire
+  file: path='{{ nuget_base_dir }}' state=directory 
+  
+- name: Telecharger Nuget.exe
+  command: curl -L "{{ repository_url }}/service/local/artifact/maven/redirect?r=public&g=org.nuget&a=nuget&v={{ nuget_version }}&e=exe" -o {{ nuget_base_dir }}/nuget.exe
+  
+- name: Creer le script
+  template: src=nuget dest=/usr/bin/nuget  mode=0755

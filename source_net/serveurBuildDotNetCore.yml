@@ -1,0 +1,22 @@
+- name: Installation DotNet Core Sur un serveur de Build
+  hosts: build
+  vars: 
+    dotnet_version: 1.0.0
+    dotnet_classifier: preview2
+    dotnet_base_dir: /opt/dotnet-{{ dotnet_version }}-{{ dotnet_classifier }}
+    repository_url: http://inspq-6098.inspq.qc.ca:8081/nexus
+    nuget_version: 3.4.4
+    nuget_base_dir: /opt/nuget
+    
+  tasks:
+    - include: dotNetCore.yml
+    - include: nuget.yml
+    
+    - name: Installer npm
+      yum: name=npm state=present
+      
+    - name: Installer bower
+      command: chdir='{{ dotnet_base_dir }}' npm install -g bower creates=/usr/lib/node_modules/bower
+      
+    - name: Installer gulp
+      command: chdir='{{ dotnet_base_dir }}' npm install -g gulp creates=/usr/lib/node_modules/gulp

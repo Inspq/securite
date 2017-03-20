@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Execution des tests fonctionnels SoapUI pour Sx5" basedir="." default="run.soapui">
+	<!-- define properties in the build.properties file -->
+	<property file="build.properties"/>
+	<property name="id.file.path" value="${basedir}/tests"/>
+	
+	<path id="ant.lib">
+		<fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+	   		<classpath refid="ant.lib"/>
+	</taskdef>
+
+	<!-- e.g. soapUI-4.0.0/bin -->
+	<property name="SOAPUI_HOME" location="${soapui.location}" />
+		
+	<!-- junit reports location -->
+	<property name="reports" location="${build.dir}/junitreports" />
+    <target name="getCurrentDateDime">
+            <tstamp>
+                    <format property="test.start.date.time" pattern="yyyyMMddHHmmss"
+                    locale="fr,CA"/>
+            </tstamp>
+    </target>
+	<target name="run.soapui" depends="getCurrentDateDime">		
+		<echo message="soapui location: ${SOAPUI_HOME}"/>
+        <echo>
+Debut du test : ${test.start.date.time}
+URL Endpoint : ${app.service.endpoint.url}        
+        </echo>
+		
+		<!-- Obtenir la liste des fichiers des tests SOAPUI -->
+		<path id="test.files">
+			<fileset dir="${soapui.project.location}">
+				<include name="*.xml"/>
+			</fileset>
+		</path>
+		<pathconvert property="test.files.list">
+		    <path refid="test.files" />
+		    <mapper>
+		        <globmapper from="${basedir}/${soapui.project.location}/*" to="*" handledirsep="true" />
+		    </mapper>
+		</pathconvert>
+		<!--property name="test.files.list" value="sx5-dotnet-REST-soapui-project.xml:sx5-java-REST-soapui-project.xml"/-->
+		<!-- Execution des tests -->
+		<trycatch property="error.msg" reference="error.ref">
+			<try>
+				
+				<!-- Executer les tests  -->
+				<for list="${test.files.list}" param="testfile" delimiter=":">
+					<sequential>
+						<var name="test.file" value="@{testfile}"/>
+						<!-- test.suite is the name of test suite to run -->
+						<java fork="true" failonerror="false" classname="com.eviware.soapui.tools.SoapUITestCaseRunner">
+							<!--arg line="-M -j -f${reports} -r -a ${soapui.project.location}/${test.file} -h ${dss.service.endpoint.url}" /-->
+							<arg line="-M -j -f${reports} -r -a ${soapui.project.location}/${test.file} -Gsocket_timeout=180000 -h ${app.service.endpoint.url}" />
+							<jvmarg value="-Xms128m" />
+							<jvmarg value="-Xmx1024m" />
+							<jvmarg value="-Dsoapui.properties=soapui.properties" />
+							<jvmarg value="-Dsoapui.home=%SOAPUI_HOME%" />			
+							<jvmarg value="-Dsoapui.ext.libraries=${SOAPUI_HOME}/ext " />
+							<jvmarg value="-Dsoapui.ext.listeners=${SOAPUI_HOME}/listeners" />
+							<jvmarg value="-Dsoapui.ext.actions=${SOAPUI_HOME}/actions " />
+		
+							<classpath>
+								<pathelement location="${SOAPUI_HOME}/${soapui.jar}" />				
+								<pathelement location="${SOAPUI_HOME}" />
+				                <fileset dir="${SOAPUI_HOME}/../lib">
+				                    <include name="*.jar"/>
+				                </fileset>				
+							</classpath>
+						</java>
+					</sequential>
+				</for>
+			</try>
+			<catch>
+				<echo> 
+	Echec du test: 
+		Message : ${error.msg}
+		Reference : ${error.ref}
+				</echo>
+			</catch>
+			<finally>
+				<!--antcall target="executeCleanupSQLScript"/-->
+				<!--antcall target="generateCleanupSQLScript"/-->
+			</finally>
+		</trycatch>
+	</target>
+	<target name="cleanup">
+    	<delete dir="junitreports"/>
+    	<delete file="global-groovy.log"/>
+    	<delete file="soapui-errors.log"/>
+    	<delete file="soapui.log"/>
+	</target>
+</project>

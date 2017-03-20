@@ -1,0 +1,59 @@
+- name: Installation DotNet Core Sur un serveur applicatif
+  hosts: app
+  vars: 
+    dotnet_version: 1.0.0
+    dotnet_classifier: preview2
+    dotnet_base_dir: /opt/dotnet-{{ dotnet_version }}-{{ dotnet_classifier }}
+    repository_url: http://inspq-6098.inspq.qc.ca:8081/nexus
+    nuget_version: 3.4.4
+    nuget_base_dir: /opt/nuget
+    sx5_dotnet_base_dir: /opt/sx5/dotnet
+    test_rest_service_base_dir: '{{ sx5_dotnet_base_dir }}/TestRestService'
+    servicesui_base_dir: '{{ sx5_dotnet_base_dir }}/ServicesUI'
+    
+  tasks:
+    - include: dotNetCore.yml
+    - include: nuget.yml
+    
+    - name: Supprimer le Repertoire de base TestRestService
+      file: name='{{ test_rest_service_base_dir }}' state=absent
+
+    - name: Creer Repertoire de base TestRestService
+      file: name='{{ test_rest_service_base_dir }}' state=directory owner='{{ tomcat_admin }}' group='{{ tomcat_group }}'
+      
+    - name: Telecharger TestRestService
+      command: sudo -u {{ tomcat_admin }} curl -L "{{ repository_url }}/service/local/artifact/maven/redirect?r=public&g=ca.qc.inspq.sx5&a=TestRestService&v=1.0.0&e=zip" -o /tmp/TestRestService-1.0.0.zip
+
+    - name: Decompresser TestRestService
+      command: sudo -u {{ tomcat_admin }} unzip /tmp/TestRestService-1.0.0.zip -d {{ test_rest_service_base_dir }}
+    
+    - name: Supprimer TestRestService-1.0.0.zip
+      file: name=/tmp/TestRestService-1.0.0.zip state=absent
+       
+    - name: Demarrer TestRestService
+      shell: cd {{ test_rest_service_base_dir }} && sudo -u {{ tomcat_admin }} nohup dotnet exec TestRestService.dll &
+      
+    - name: Supprimer Repertoire de base ServicesUI
+      file: name='{{ servicesui_base_dir }}' state=absent
+
+    - name: Creer Repertoire de base ServicesUI
+      file: name='{{ servicesui_base_dir }}' state=directory owner='{{ tomcat_admin }}' group='{{ tomcat_group }}'
+      
+    - name: Telecharger ServicesUI
+      command: sudo -u {{ tomcat_admin }}  curl -L "{{ repository_url }}/service/local/artifact/maven/redirect?r=public&g=ca.qc.inspq.sx5&a=ServicesUI&v=1.0.0&e=zip" -o /tmp/ServicesUI-1.0.0.zip
+     
+    - name: Decompresser ServicesUI
+      command: sudo -u {{ tomcat_admin }} unzip /tmp/ServicesUI-1.0.0.zip -d {{ servicesui_base_dir }}
+
+    - name: Supprimer ServicesUI.zip
+      file: name=/tmp/ServicesUI-1.0.0.zip state=absent
+             
+    - name: Demarrer ServicesUI
+      shell: cd /opt/sx5/dotnet/ServicesUI && sudo -u {{ tomcat_admin }} nohup dotnet exec ServicesUI.dll &
+     
+    - name: Ovrir le port 5000
+      firewalld: port='5000/tcp' state=enabled immediate=true permanent=true
+
+    - name: Ovrir le port 50633
+      firewalld: port='50633/tcp' state=enabled immediate=true permanent=true
+ 

@@ -1,0 +1,21 @@
+  - name: Installer Packages
+    yum: 
+      name: '{{ item }}'
+      state: present
+    with_items:
+      - libunwind 
+      - libicu
+      - unzip
+      - curl
+        
+  - name: Creer Repertoire de Base
+    file: path='{{ dotnet_base_dir }}' state=directory 
+
+  - name: Telecharger Nuget.exe
+    command: curl -L "{{ repository_url }}/service/local/artifact/maven/redirect?r=public&g=com.microsoft&a=dotnet&v={{ dotnet_version }}&e=zip&c={{ dotnet_classifier }}" -o /tmp/dotnet.zip
+    
+  - name: Extraire le SDK DotNet
+    command: chdir='{{ dotnet_base_dir }}' unzip /tmp/dotnet.zip creates={{ dotnet_base_dir }}/dotnet
+    
+  - name: Creer les lien symbolique dans /usr/bin pour dotnet
+    file: src='{{ dotnet_base_dir }}/dotnet' dest=/usr/bin/dotnet state=link force=yes

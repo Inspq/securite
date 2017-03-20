@@ -1,0 +1,50 @@
+---
+- hosts: all
+  vars:
+    docker_registry: nexus3.inspq.qc.ca:5000
+    
+- hosts: idm
+  vars:
+    openam_image: ${docker_registry}/inspq/openam
+    openam_image_version: latest
+    openam_internal_port: 8080
+    openam_external_port: 18080
+    openig_image: ${docker_registry}/inspq/openig
+    openig_image_version: latest
+    openig_internal_port: 8080
+    openig_external_port: 18081
+  roles:
+  - docker-engine
+
+  tasks:  
+  - name: Mettre a jour l'image Docker pour OpenAM
+    docker_image: 
+      name: "{{ openam_image }}"
+      tag: "{{ openam_image_version }}"
+      pull: true
+      state: present
+
+  - name: Creer ou mettre a jour le conteneur Docker OpenAM 
+    docker_container:
+      name: "openam"
+      image: "{{ openam_image }}:{{ openam_image_version }}"
+      state: started
+      restart_policy: unless-stopped
+      ports:
+      - "{{ openam_external_port }}:{{ openam_internal_port }}"
+      
+  - name: Mettre a jour l'image Docker pour OpenIG
+    docker_image: 
+      name: "{{ openig_image }}"
+      tag: "{{ openig_image_version }}"
+      pull: true
+      state: present
+
+  - name: Creer ou mettre a jour le conteneur Docker OpenIG
+    docker_container:
+      name: "openig"
+      image: "{{ openig_image }}:{{ openig_image_version }}"
+      state: started
+      restart_policy: unless-stopped
+      ports:
+      - "{{ openig_external_port }}:{{ openig_internal_port }}"

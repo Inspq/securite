@@ -1,0 +1,255 @@
+<project basedir="." name="Deploiement des artefacts du projet Sx5">
+	<!-- Valider l'existance des fichiers de properties  -->
+	<echo message="**************************************************************" />
+	<echo message=" ${RepertoireProprietesDeploiement}/${env.deploiement}.properties " />
+	<echo message="**************************************************************" />
+	<!-- Fichier ENV.properties  -->
+	<available file="${RepertoireProprietesDeploiement}/${env.deploiement}.properties" property="isEnvFileAvail" />
+	<fail unless="isEnvFileAvail" message="The build properties file does not exist, can't build. Is BUILD_TARGET set?" />
+	<property file="${RepertoireProprietesDeploiement}/${env.deploiement}.properties" />
+
+	<property name="tomcat.deployment.path" value="../TomcatDeploiement"/>
+	<property name="wso2.deployment.path" value="../WSO2Deploiement"/>
+	<property name="nom.projet" value="Sx5"/>
+
+	<path id="ant.lib">
+		<fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+    <!-- define additional Ant tasks -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" >
+		<classpath>
+			<pathelement location="lib/ant-contrib-1.0b3.jar"/>
+		</classpath>
+	</taskdef>
+
+	<taskdef name="iif" classname="ise.antelope.tasks.IfTask">
+		<classpath refid="ant.lib" />
+	</taskdef>
+	
+	<taskdef name="sshexec" classname="org.apache.tools.ant.taskdefs.optional.ssh.SSHExec">
+		<classpath refid="ant.lib" />
+	</taskdef>
+
+	<taskdef name="scp" classname="org.apache.tools.ant.taskdefs.optional.ssh.Scp">
+		<classpath refid="ant.lib" />
+	</taskdef>
+
+	<taskdef name="for" classname="net.sf.antcontrib.logic.ForTask">
+		<classpath refid="ant.lib" />
+	</taskdef>
+
+	<taskdef name="var" classname="net.sf.antcontrib.property.Variable">
+		<classpath refid="ant.lib" />
+	</taskdef>
+	<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask">
+		<classpath refid="ant.lib" />
+	</taskdef>
+	<target name="supprimerESB">
+		<ant antfile="${wso2.deployment.path}/deployer.xml" target="uninstallESB" dir="${wso2.deployment.path}">
+		</ant>
+	</target>
+	<target name="demarrerESB">
+		<ant antfile="${wso2.deployment.path}/deployer.xml" target="startESB" dir="${wso2.deployment.path}">
+		</ant>
+	</target>
+	<target name="arreterESB">
+		<ant antfile="${wso2.deployment.path}/deployer.xml" target="stopESB" dir="${wso2.deployment.path}">
+		</ant>
+	</target>
+	<target name="installerESB">
+		<ant antfile="${wso2.deployment.path}/deployer.xml" target="installESB" dir="${wso2.deployment.path}">
+		</ant>
+	</target>
+	<target name="preparerServeursWSO2">
+		<ant antfile="${wso2.deployment.path}/deployer.xml" target="genererScriptPreparation" dir="${wso2.deployment.path}">
+		</ant>
+		<ant antfile="${wso2.deployment.path}/deployer.xml" target="genererScriptPreparation" dir="${wso2.deployment.path}" inheritall="false">
+			<property name="RepertoireProprietesDeploiement" value="${RepertoireProprietesDeploiement}"/>
+			<property name="env.deploiement" value="${env.deploiement}"/>
+			<property name="wso2.host.list" value="${wso2.is.host.list}"/>
+			<property name="wso2.src.host" value="${wso2.src.host}"/>
+			<property name="wso2.src.dir" value="${wso2.src.dir}"/>
+			<property name="wso2.src.user" value="${wso2.src.user}"/>
+			<property name="wso2.user" value="${wso2.user}"/>
+			<property name="wso2.base.dir" value="${wso2.base.dir}"/>
+			<property name="wso2.src.is.file" value="${wso2.src.is.file}"/>
+			<property name="wso2.is.dir" value="${wso2.is.dir}"/>
+			<property name="wso2.is.offset" value="${wso2.is.offset}"/>
+		</ant>
+	</target>
+	<target name="demarrerIS">
+		<ant antfile="${wso2.deployment.path}/deployer.xml" target="startIS" dir="${wso2.deployment.path}" inheritall="false">
+			<property name="RepertoireProprietesDeploiement" value="${RepertoireProprietesDeploiement}"/>
+			<property name="env.deploiement" value="${env.deploiement}"/>
+			<property name="wso2.host.list" value="${wso2.is.host.list}"/>
+			<property name="wso2.src.host" value="${wso2.src.host}"/>
+			<property name="wso2.src.dir" value="${wso2.src.dir}"/>
+			<property name="wso2.src.user" value="${wso2.src.user}"/>
+			<property name="wso2.user" value="${wso2.user}"/>
+			<property name="wso2.base.dir" value="${wso2.base.dir}"/>
+			<property name="wso2.src.is.file" value="${wso2.src.is.file}"/>
+			<property name="wso2.is.dir" value="${wso2.is.dir}"/>
+			<property name="wso2.is.offset" value="${wso2.is.offset}"/>
+		</ant>
+	</target>
+	<target name="arreterIS">
+		<ant antfile="${wso2.deployment.path}/deployer.xml" target="stopIS" dir="${wso2.deployment.path}" inheritall="false">
+			<property name="RepertoireProprietesDeploiement" value="${RepertoireProprietesDeploiement}"/>
+			<property name="env.deploiement" value="${env.deploiement}"/>
+			<property name="wso2.host.list" value="${wso2.is.host.list}"/>
+			<property name="wso2.src.host" value="${wso2.src.host}"/>
+			<property name="wso2.src.dir" value="${wso2.src.dir}"/>
+			<property name="wso2.src.user" value="${wso2.src.user}"/>
+			<property name="wso2.user" value="${wso2.user}"/>
+			<property name="wso2.base.dir" value="${wso2.base.dir}"/>
+			<property name="wso2.src.is.file" value="${wso2.src.is.file}"/>
+			<property name="wso2.is.dir" value="${wso2.is.dir}"/>
+			<property name="wso2.is.offset" value="${wso2.is.offset}"/>
+		</ant>
+	</target>
+	<target name="installerIS">
+		<ant antfile="${wso2.deployment.path}/deployer.xml" target="installIS" dir="${wso2.deployment.path}" inheritall="false">
+			<property name="RepertoireProprietesDeploiement" value="${RepertoireProprietesDeploiement}"/>
+			<property name="env.deploiement" value="${env.deploiement}"/>
+			<property name="wso2.host.list" value="${wso2.is.host.list}"/>
+			<property name="wso2.src.host" value="${wso2.src.host}"/>
+			<property name="wso2.src.dir" value="${wso2.src.dir}"/>
+			<property name="wso2.src.user" value="${wso2.src.user}"/>
+			<property name="wso2.user" value="${wso2.user}"/>
+			<property name="wso2.base.dir" value="${wso2.base.dir}"/>
+			<property name="wso2.src.is.file" value="${wso2.src.is.file}"/>
+			<property name="wso2.is.dir" value="${wso2.is.dir}"/>
+			<property name="wso2.is.offset" value="${wso2.is.offset}"/>
+		</ant>
+	</target>
+	<target name="supprimerIS">
+		<ant antfile="${wso2.deployment.path}/deployer.xml" target="uninstallIS" dir="${wso2.deployment.path}" inheritall="false">
+			<property name="RepertoireProprietesDeploiement" value="${RepertoireProprietesDeploiement}"/>
+			<property name="env.deploiement" value="${env.deploiement}"/>
+			<property name="wso2.host.list" value="${wso2.is.host.list}"/>
+			<property name="wso2.src.host" value="${wso2.src.host}"/>
+			<property name="wso2.src.dir" value="${wso2.src.dir}"/>
+			<property name="wso2.src.user" value="${wso2.src.user}"/>
+			<property name="wso2.user" value="${wso2.user}"/>
+			<property name="wso2.base.dir" value="${wso2.base.dir}"/>
+			<property name="wso2.src.is.file" value="${wso2.src.is.file}"/>
+			<property name="wso2.is.dir" value="${wso2.is.dir}"/>
+			<property name="wso2.is.offset" value="${wso2.is.offset}"/>
+		</ant>
+	</target>
+	<target name="configurerLDAP">
+		<echo message="Configuration du LDAP pour le domaine ${ldap.domaine}"/>
+		<copy file="scripts/configLDAP_gabarit.sh" 
+		    tofile="scripts/configLDAP.sh"
+			overwrite="true" />
+		<replace file="scripts/configLDAP.sh" token="@DOMAINE@" value="${ldap.domaine}" />
+		<replace file="scripts/configLDAP.sh" token="@LDAPPWD@" value="${ldap.pwd}" />
+		<!-- Copier le script LDAP sur le serveur -->
+		<scp 
+			file="scripts/configLDAP.sh"
+			verbose="true" 
+			trust="true"
+			todir="root@${ldap.host}:/tmp" 
+			keyfile="${keyfile}"/>
+		<!-- Executer le script LDAP -->
+		<sshexec 
+			failonerror="true"
+			host="${ldap.host}" 
+			trust="true"
+			username="root" 
+			keyfile="${keyfile}"
+			command="chmod a+x /tmp/configLDAP.sh;/tmp/configLDAP.sh" />
+	</target>
+	<target name="preparerServeursTomcat">
+		<ant antfile="${tomcat.deployment.path}/deployer.xml" target="genererScriptPreparation" dir="${tomcat.deployment.path}">
+		</ant>
+	</target>
+	<target name="deployerWarTomcat">
+		<!-- Pour chaque WAR a deployer sur Tomcat -->
+		<for list="${tomcat.war.list}" param="tomcatwar">
+			<sequential>
+				<propertycopy name="war.file" from="@{tomcatwar}.war.file" override="true" />
+				<ant antfile="${tomcat.deployment.path}/deployer.xml" target="deployWAR" dir="${tomcat.deployment.path}">
+					<property name="war.file" value="${basedir}/war/${war.file}"/>
+				</ant>
+			</sequential>
+		</for>
+	</target>
+	<target name="supprimerWarTomcat">
+		<!-- Pour chaque WAR a supprimer de sur le serveur Tomcat -->
+		<for list="${tomcat.war.list}" param="tomcatwar">
+			<sequential>
+				<propertycopy name="war.file" from="@{tomcatwar}.war.file" override="true" />
+				<ant antfile="${tomcat.deployment.path}/deployer.xml" target="unDeployWAR" dir="${tomcat.deployment.path}">
+					<property name="war.file" value="${basedir}/war/${war.file}"/>
+				</ant>
+			</sequential>
+		</for>
+	</target>
+	<target name="creerSourcesDonneesTomcat">
+		<for list="${tomcat.datasource.list}" param="tomcatds">
+			<sequential>
+				<propertycopy name="datasource.driver" from="@{tomcatds}.datasource.driver" override="true" />
+				<propertycopy name="datasource.url" from="@{tomcatds}.datasource.url" override="true" />
+				<propertycopy name="datasource.username" from="@{tomcatds}.datasource.username" override="true" />
+				<propertycopy name="mot.de.passe" from="@{tomcatds}.datasource.password" override="true" />
+				<propertycopy name="datasource.password.encrypt" from="@{tomcatds}.datasource.password.encrypt" override="true" />
+				<propertycopy name="datasource.properties.file.name" from="@{tomcatds}.datasource.properties.file.name" override="true" />
+				<propertycopy name="datasource.properties.file.path" from="@{tomcatds}.datasource.properties.file.path" override="true" />
+				<!--antcall target="encrypterMotDePasse"/-->
+				<iif name="datasource.password.encrypt" value="true">
+			    	<path id="encryptlib">
+			    		<fileset dir="jar">
+							<include name="**/*.jar"/>
+						</fileset>
+			    	</path>
+					<var name="mot.de.passe.crypte" unset="true"/>
+					<var name="datasource.password" unset="true"/>
+					<java
+						classname="ca.qc.inspq.commun.securite.InspqEncryptionUtils"
+						outputproperty="mot.de.passe.crypte">
+						<arg value="-e"/>
+						<arg value="-s"/>
+						<arg value="${mot.de.passe}"/>
+						<classpath refid="encryptlib"/>
+					</java>
+					<property name="datasource.password" value="ENC(${mot.de.passe.crypte})"/>
+					<echo message="Mot de passe crypte: ${datasource.password}"/>
+					<else>
+						<property name="datasource.password" value="${mot.de.passe}"/>
+					</else>
+				</iif>
+				<echo message="Mot de passe crypte: ${datasource.password}"/>
+				<ant antfile="${tomcat.deployment.path}/deployer.xml" target="createDatasourcePropertiesFile" dir="${tomcat.deployment.path}">
+				</ant>
+			</sequential>
+		</for>
+	</target>
+	<target name="createTomeeEnvResources">
+		<ant antfile="${tomcat.deployment.path}/deployer.xml" target="createTomeeEnvResources" dir="${tomcat.deployment.path}">
+		</ant>
+	</target>
+	<target name="installerTomcat">
+		<ant antfile="${tomcat.deployment.path}/deployer.xml" target="installTomcat" dir="${tomcat.deployment.path}">
+		</ant>
+	</target>
+	<target name="supprimerTomcat">
+		<ant antfile="${tomcat.deployment.path}/deployer.xml" target="uninstallTomcat" dir="${tomcat.deployment.path}">
+		</ant>
+	</target>
+	<target name="demarrerTomcat">
+		<ant antfile="${tomcat.deployment.path}/deployer.xml" target="startTomcat" dir="${tomcat.deployment.path}">
+		</ant>
+	</target>
+	<target name="arreterTomcat">
+		<ant antfile="${tomcat.deployment.path}/deployer.xml" target="stopTomcat" dir="${tomcat.deployment.path}">
+		</ant>
+	</target>
+	<target name="wait30">
+		<echo message="En attente..." />
+		<sleep seconds="30" />
+	</target>
+
+</project>

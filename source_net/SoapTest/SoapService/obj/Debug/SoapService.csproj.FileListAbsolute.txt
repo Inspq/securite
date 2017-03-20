@@ -1,0 +1,12 @@
+C:\www\_labo\core\SoapTest\SoapService\bin\Debug\SoapService.dll.config
+C:\www\_labo\core\SoapTest\SoapService\bin\Debug\SoapService.dll
+C:\www\_labo\core\SoapTest\SoapService\bin\Debug\SoapService.pdb
+C:\www\_labo\core\SoapTest\SoapService\obj\Debug\SoapService.csprojResolveAssemblyReference.cache
+C:\www\_labo\core\SoapTest\SoapService\obj\Debug\SoapService.dll
+C:\www\_labo\core\SoapTest\SoapService\obj\Debug\SoapService.pdb
+M:\JavaSources\Securite\source_net\SoapTest\SoapService\bin\Debug\SoapService.dll.config
+M:\JavaSources\Securite\source_net\SoapTest\SoapService\bin\Debug\SoapService.dll
+M:\JavaSources\Securite\source_net\SoapTest\SoapService\bin\Debug\SoapService.pdb
+M:\JavaSources\Securite\source_net\SoapTest\SoapService\obj\Debug\SoapService.csprojResolveAssemblyReference.cache
+M:\JavaSources\Securite\source_net\SoapTest\SoapService\obj\Debug\SoapService.dll
+M:\JavaSources\Securite\source_net\SoapTest\SoapService\obj\Debug\SoapService.pdb

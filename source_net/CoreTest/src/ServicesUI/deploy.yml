@@ -1,0 +1,55 @@
+---
+- hosts: app
+  vars:
+    docker_registry: nexus3.inspq.qc.ca:5000
+    sx5dotnetui_internal_port: 5000
+    sx5dotnetui_docker_image: "{{ docker_registry }}/inspq/sx5dotnetui"
+    
+  roles:
+  - docker-engine
+      
+  tasks:
+
+  - name: Docker repository logon
+    shell: docker login -u {{ docker_registry_username }} -p  {{ docker_registry_password }} -e {{ docker_registry_email }} {{ docker_registry }}
+    when: docker_registry_username is defined and docker_registry_password is defined and docker_registry_email is defined
+
+  - name: Suppression du conteneur pour sx5dotnetui 
+    docker:
+      name: "{{ sx5dotnetui_container_name }}"
+      image: "{{ sx5dotnetui_docker_image }}:{{ sx5dotnetui_image_version }}"
+      state: absent
+    
+  - name: Mettre a jour l'image Docker
+    docker_image: 
+      name: "{{ sx5dotnetui_docker_image }}"
+      tag: "{{ sx5dotnetui_image_version }}"
+      pull: true
+      state: present
+      force: yes
+      
+  - name: Creation du conteneur pour sx5dotnetui 
+    docker_container:
+      name: "{{ sx5dotnetui_container_name }}"
+      image: "{{ sx5dotnetui_docker_image }}:{{ sx5dotnetui_image_version }}"
+      state: started
+      restart_policy: unless-stopped
+      ports:
+      - "{{ sx5dotnetui_external_port }}:{{ sx5dotnetui_internal_port }}"
+      env:
+        "JAVA_REST_BASE_URL": "http://{{ sx5javarest_base_url }}"
+        "JAVA_SOAP_BASE_URL": "http://{{ sx5javasoap_base_url }}"
+        "DOTNET_REST_BASE_URL": "http://{{ sx5dotnetrest_base_url }}"
+        
+  - name: Creation du hote virtuel dans APACHE
+    template:
+      src: sx5dotnetui-gabarit-apache.conf
+      dest: /etc/httpd/conf.d/{{ sx5dotnetui_base_url }}.conf
+      force: yes
+    when: sx5dotnetui_base_url is defined
+    notify:
+      - restart httpd  
+      
+  handlers:
+  - name: restart httpd 
+    service: name=httpd state=restarted

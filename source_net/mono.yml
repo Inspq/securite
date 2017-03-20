@@ -1,0 +1,11 @@
+- name: Installer le depot Mono
+  yum_repository:
+    name: mono-project
+    description: Mono Project
+    baseurl: http://download.mono-project.com/repo/centos/
+    gpgkey: http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+    
+- name: Installer Mono
+  yum:
+    name: mono-devel
+    state: present

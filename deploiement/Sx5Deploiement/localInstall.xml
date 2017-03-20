@@ -1,0 +1,282 @@
+<project name="Installation locale Sx5" basedir=".">
+    <!-- The following properties must be defined with -D to execute the script
+    env.properties.dir : ENV variable containing the path of the deployment properties file
+    admin.profile : Path to .profile or .bashrc file for the Admin user
+    admin.user : User who have administration right for the Artifact
+    admin.group : Group owner of the artifact on deploy server
+    admin.group.ad : Name of the Active Diretory deployment group for the artifact 
+    java.home.deployment : Java home directory on deployment server
+    ant.home.deployment : ANT home directory on deployment server
+    package.name : Name of the ZIP file for the package to install
+    target.server.unix.user : Username to connect to the deployment server
+    package.base.dir : Directory where to install the package
+    package.version : Version of the package to install
+    nim.host : Hostname of the package repository server
+    nim.user : Username du connect to the package repository server
+    nim.key.file : SSH key file to use to connect to the package repository server
+    nim.base.path : Path of the package on the repository server.
+    builder.path : Path of the directory containing the version.properties file
+    -->
+	<property environment="env" />
+	<!--property name="cmdAdmin" value="sudo -u ${admin.user}" /-->
+	<property name="builder.path" value="../../source"/>
+	<property name="nom.projet" value="Sx5"/>
+
+	<path id="ant.lib">
+		<fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef name="sshexec" classname="org.apache.tools.ant.taskdefs.optional.ssh.SSHExec">
+		<classpath refid="ant.lib" />
+	</taskdef>
+
+	<taskdef name="scp" classname="org.apache.tools.ant.taskdefs.optional.ssh.Scp">
+		<classpath refid="ant.lib" />
+	</taskdef>
+	<taskdef name="for" classname="net.sf.antcontrib.logic.ForTask">
+		<classpath refid="ant.lib" />
+	</taskdef>
+
+	<taskdef name="var" classname="net.sf.antcontrib.property.Variable">
+		<classpath refid="ant.lib" />
+	</taskdef>
+	
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+   		<classpath refid="ant.lib"/>
+	</taskdef>
+	
+	<target name="createDir" depends="cleanupDestDir">
+		<echo message="**************************************************************" />
+    	<echo message="Create the base directory on the Deployment Server" />
+    	<echo message="package.base.dir  		= ${package.base.dir}" />
+    	<echo message="package.version  		= ${package.version}" />
+    	<echo message="Directories				= ${package.base.dir}/${package.version}/${nom.projet} ${package.base.dir}/properties" />
+    	<echo message="**************************************************************" />
+
+	    <!-- Créer les répertoires d'installation -->
+		<mkdir dir="${package.base.dir}/${package.version}/${nom.projet}"/>
+		<mkdir dir="${package.base.dir}/properties" />
+		
+	    <!-- S'assurer que les permissions du répertoire de destination permettent la lecture l'écriture et l'exécution pour le groupe propriétaire-->	    
+		<chmod perm="g+rwx">
+			<dirset dir="${package.base.dir}/${package.version}">
+				<include name="**"/>
+			</dirset>
+			<dirset dir="${package.base.dir}">
+				<include name="properties"/>
+			</dirset>
+		</chmod>
+			    
+	</target>
+	
+	<target name="editProfile">
+		<echo message="**************************************************************" />
+	    <echo message="Edit profil file to add ENV for the properties file ${env.properties.dir}" />
+	    <echo message="admin.profile  			= ${admin.profile}" />
+	    <echo message="env.properties.dir  		= ${env.properties.dir}" />
+	    <echo message="Directory				= ${package.base.dir}/properties" />
+	    <echo message="**************************************************************" />
+	    		
+	    <!-- Lancer le script de modification du profil -->
+		<exec executable="bash">
+			<arg line="${package.base.dir}/${package.version}/${nom.projet}/scripts/editProfile.sh ${user.home}/${admin.profile} ${env.properties.dir} ${package.base.dir}/properties" />
+		</exec>
+	</target>
+	
+	<target name="cleanupDestDir">
+		<echo message="**************************************************************" />
+		<echo message=" Delete files form destination directory on the deployment server " />
+		<echo message=" ${package.base.dir}/${package.version}/${nom.projet} " />
+		<echo message="**************************************************************" />	    
+		<if>
+			<available file="${package.base.dir}/${package.version}" type="dir"/>
+			<then>	
+				<delete includeemptydirs="true">
+					<fileset dir="${package.base.dir}/${package.version}" includes="**/*" defaultexcludes="false"/>
+				</delete>
+				<delete dir="${package.base.dir}/${package.version}"/>
+			</then>
+		</if>
+	</target>
+	<target name="copyPackage">
+		<echo message="**************************************************************" />
+		<echo message=" Copy package from DEPOT to target deployment server " />
+		<echo message=" Depot Server		= ${nim.host}" />
+		<echo message=" Directory			= ${package.base.dir}/${package.version}" />
+		<echo message="**************************************************************" />	    
+		<tstamp>
+			<format property="install.date.time" pattern="yyyyMMddHHmmss" locale="fr,CA"/>
+		</tstamp>
+		<mkdir dir="/tmp/${install.date.time}"/>
+		<chmod dir="/tmp/${install.date.time}" perm="a+rw"/>
+		<scp
+			file="${nim.user}@${nim.host}:${nim.base.path}/${package.version}/${package.name}"
+			trust="true" 
+			verbose="true" 
+			keyfile="${nim.key.file}" 
+			todir="/tmp/${install.date.time}" 
+			passphrase="" />
+		<chmod file="/tmp/${install.date.time}/${package.name}" perm="a+r"/>    
+	</target>
+	
+	<target name="unzip">
+		<echo message="**************************************************************" />
+		<echo message=" Unzip package " />
+		<echo message=" ${package.base.dir}/${package.version}/${nom.projet} " />
+		<echo message="**************************************************************" />	    
+		<!-- Decompresser le package -->
+		<unzip src="/tmp/${install.date.time}/${package.name}" dest="${package.base.dir}/${package.version}/${nom.projet}" />
+		
+
+		<!-- S'assurer que les fichiers .sh d'installation sont executable -->
+		<chmod perm="a+x">
+			<fileset dir="${package.base.dir}/${package.version}/${nom.projet}">
+				<include name="**/*.sh" />
+			</fileset>
+		</chmod>
+				
+		<!-- Supprimer l'archive -->
+		<delete file="/tmp/${install.date.time}/${package.name}" />
+		<delete dir="/tmp/${install.date.time}"/>
+		<!-- Installer les dependances -->
+		<antcall target="installDeps"/>
+	</target>
+	<target name="installDeps">
+		<!-- Obtenir la liste des fichiers zip pour les dépendances -->
+		<path id="zip.files">
+			<fileset dir="${package.base.dir}/${package.version}/${nom.projet}/deps">
+				<include name="*.zip"/>
+			</fileset>
+		</path>
+		<pathconvert property="zip.files.list">
+		    <path refid="zip.files" />
+		    <mapper>
+		        <globmapper from="${package.base.dir}/${package.version}/${nom.projet}/deps/*" to="*" handledirsep="true" />
+		    </mapper>
+		</pathconvert>
+		
+		<!-- Decompresser les fichiers dans le sous-repertoire work -->
+		<for list="${zip.files.list}" param="zipfile" delimiter=":">
+			<sequential>
+				<var name="zip.file" value="@{zipfile}"/>
+				<propertyregex property="deps.dir"
+					input="${zip.file}"
+					regexp="(.+)\.(.+)"
+					select="\1"
+					override="true"			
+					casesensitive="false" />
+				<unzip src="${package.base.dir}/${package.version}/${nom.projet}/deps/${zip.file}" dest="${package.base.dir}/${package.version}/${deps.dir}"/>
+			</sequential>
+		</for>
+	</target>
+	<target name="genererScriptExecDeployer">
+		<copy file="scripts/execDeployer_gabarit.sh" 
+		    tofile="${package.base.dir}/${package.version}/${nom.projet}/execDeployer.sh"
+			overwrite="true" />
+		<replace file="${package.base.dir}/${package.version}/${nom.projet}/execDeployer.sh" token="@PROFILE@" value="${admin.profile}" />
+		<replace file="${package.base.dir}/${package.version}/${nom.projet}/execDeployer.sh" token="@ENVPROPS@" value="${env.properties.dir}" />
+		
+        <chmod perm="a+x" file="${package.base.dir}/${package.version}/${nom.projet}/execDeployer.sh"/>
+	</target>
+	<target name="modifierScriptPreparation">
+		<echo message="**************************************************************" />
+		<echo message=" Generate a preparation script on deployment server" />
+		<echo message=" Copy file on deployment server" />
+		<echo message=" Script : /tmp/prepSvrDepl.sh" />
+		<echo message="**************************************************************" />
+		<copy file="scripts/prepSvrDepl_gabarit.sh" 
+		    tofile="scripts/prepSvrDepl.sh"
+			overwrite="true" />
+		<replace file="scripts/prepSvrDepl.sh" token="@USER@" value="${admin.user}" />
+		<replace file="scripts/prepSvrDepl.sh" token="@PROFILE@" value="${admin.profile}" />
+		<replace file="scripts/prepSvrDepl.sh" token="@GRP@" value="${admin.group}" />
+		<replace file="scripts/prepSvrDepl.sh" token="@BASEDIR@" value="${package.base.dir}" />
+		<replace file="scripts/prepSvrDepl.sh" token="@JAVAHOME@" value="${java.home.deployment}" />
+		<replace file="scripts/prepSvrDepl.sh" token="@ANTHOME@" value="${ant.home.deployment}" />
+		<replace file="scripts/prepSvrDepl.sh" token="@SUDORUNASALIAS@" value="${sudo.runas.alias}" />
+
+		<!-- Ajouter l'usager qui a lance le deploiement dans le groupe de deploiement si celui-ci n'est pas un usager AD -->
+		<if>
+			<isset property="target.server.unix.user"/>
+			<then>
+				<if>
+					<matches pattern="[@\\]" string="${target.server.unix.user}"/>
+					<then>
+						<echo message="L'usager ${target.server.unix.user} ne sera pas ajoute dans le groupe car c'est un usager AD"/>
+					</then>
+					<else>
+						<echo file="scripts/prepSvrDepl.sh" append="true">
+# Ajout de l'usager UNIX ${target.server.unix.user} dans le groupe ${admin.group}
+echo "Ajout de l'usager UNIX ${target.server.unix.user} dans le groupe ${admin.group}"
+usermod -G `id -nG ${target.server.unix.user} | tr " " ","`,${admin.group} ${target.server.unix.user}
+						</echo>
+					</else>
+				</if>
+			</then>
+		</if>
+		<!-- Ajouter le groupe AD de l'artefact dans le sudo et dans l'acl du répertoire de base du package -->
+		<if>
+			<isset property="admin.group.ad"/>
+			<then>
+				<echo file="scripts/prepSvrDepl.sh" append="true">
+# Ajout de la configuration sur pour le groupe Active Directory
+if [ -f /etc/sudoers.d/sudo${admin.user} ]
+then
+	if ! grep --quiet ${admin.group.ad} /etc/sudoers.d/sudo${admin.user}; then
+		sed -i "3iDefaults:%${admin.group.ad} \!requiretty" /etc/sudoers.d/sudo${admin.user}
+		sed -i "\$a%${admin.group.ad}   ALL=(FAADMIN) NOPASSWD: ALL" /etc/sudoers.d/sudo${admin.user}
+	fi
+fi
+# Ajout de l'ACL sur le repertoire de base du Package
+if [ -d ${package.base.dir} ]
+then
+	setfacl -m d:g:${admin.group.ad}:rwx ${package.base.dir}
+fi
+				</echo>
+			</then>
+		</if>
+	</target>					
+	<target name="genererScriptPreparation" depends="modifierScriptPreparation">
+
+        <!-- Copier le script dans le repertoire /tmp du serveur de deploiement -->
+		<copy file="scripts/prepSvrDepl.sh" todir="/tmp" overwrite="true"/>
+		<!-- S'assurer que le fichier .sh est executable -->
+		<chmod perm="a+x" file="/tmp/prepSvrDepl.sh"/>
+	</target>
+	<target name="preparerServeurDeploiement" depends="genererScriptPreparation">
+		<exec executable="sudo">
+			<arg line="/tmp/prepSvrDepl.sh"/>
+		</exec>
+		<echo message="**************************************************************" />
+		<echo message=" Preparation du serveur de deploiement :" />
+		<echo message="**************************************************************" />
+	</target>
+	
+	<target name="install" depends="createDir,copyPackage,unzip,editProfile,genererScriptExecDeployer">
+		<echo message="**************************************************************" />
+		<echo message=" Install package on local deployment server" />
+		<echo message=" Directory 			= ${package.base.dir}/${package.version}/${nom.projet} " />
+		<echo message="**************************************************************" />
+		
+		<antcall target="echoVersion"/>		
+	</target>
+	
+	<target name="uninstall" depends="cleanupDestDir">
+		<echo message="**************************************************************" />
+		<echo message=" Uninstall package from deployment server " />
+		<echo message=" Directory 			= ${package.base.dir}/${package.version} " />
+		<echo message="**************************************************************" />		
+	</target>
+	
+	<target name="echoVersion">
+		<loadproperties srcFile="${builder.path}/version.properties" />
+		<echo message="**************************************************************" />
+		<echo message=" Version  ${versionMaj}.${versionMin}.${patchNum}.${buildDate}.${buildNum}" /> 
+		<echo message="**************************************************************" />	    
+	</target>
+	
+	<target name="installer" depends="install"/>
+	<target name="supprimer" depends="uninstall"/>
+</project>

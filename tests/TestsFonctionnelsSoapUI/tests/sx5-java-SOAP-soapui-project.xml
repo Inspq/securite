@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="f5b42143-2cfc-4319-bd3a-892966120b98" activeEnvironment="Default" name="sx5-java-SOAP" resourceRoot="" soapui-version="5.2.1" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="7118a56d-b427-462f-9729-bb01e5078f35" wsaVersion="NONE" name="HelloSoap11" type="wsdl" bindingName="{http://sx5.inspq.qc.ca/service/soap}HelloSoap11" soapVersion="1_1" anonymous="optional" definition="http://qlapp00b.bicycle2.inspq.qc.ca/sx5-java-SOAP/java/soap/hello.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://qlapp00b.bicycle2.inspq.qc.ca/sx5-java-SOAP/java/soap/hello.wsdl"><con:part><con:url>http://qlapp00b.bicycle2.inspq.qc.ca/sx5-java-SOAP/java/soap/hello.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://sx5.inspq.qc.ca/service/soap" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://sx5.inspq.qc.ca/service/soap" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://sx5.inspq.qc.ca/service/soap">
+  <wsdl:types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://sx5.inspq.qc.ca/service/soap" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="helloRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="nom" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="helloResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="hello" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="helloResponse">
+    <wsdl:part element="tns:helloResponse" name="helloResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="helloRequest">
+    <wsdl:part element="tns:helloRequest" name="helloRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Hello">
+    <wsdl:operation name="hello">
+      <wsdl:input message="tns:helloRequest" name="helloRequest"></wsdl:input>
+      <wsdl:output message="tns:helloResponse" name="helloResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="HelloSoap11" type="tns:Hello">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="hello">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="helloRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="helloResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="HelloService">
+    <wsdl:port binding="tns:HelloSoap11" name="HelloSoap11">
+      <soap:address location="http://qlapp00b.bicycle2.inspq.qc.ca/sx5-java-SOAP/java/soap"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://qlapp00b.bicycle2.inspq.qc.ca/sx5-java-SOAP/java/soap</con:endpoint></con:endpoints><con:operation id="ca065025-cc7c-467a-9485-c6cbb438b835" isOneWay="false" action="" name="hello" bindingOperationName="hello" type="Request-Response" outputName="helloResponse" inputName="helloRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="9c9f19ce-8bea-4fa2-95af-2bd37a278452" name="GetHelloSOAP"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://qlapp00b.bicycle2.inspq.qc.ca/sx5-java-SOAP/java/soap</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://sx5.inspq.qc.ca/service/soap">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:helloRequest>
+         <soap:nom>toto</soap:nom>
+      </soap:helloRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://sx5.inspq.qc.ca/service/soap/Hello/helloRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite id="a9258170-a3f4-4f1b-8449-d66e040eecbe" name="sx5-java-SOAP-TestsFonctionnels"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="de2ab14a-319a-4604-ba51-ebc5f8c35e20" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestGetHelloSOAP" searchProperties="true"><con:settings/><con:testStep type="request" id="f724fc62-b4cf-4618-bf35-98c2180a3c55" name="hello - GetHelloSOAP"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>HelloSoap11</con:interface><con:operation>hello</con:operation><con:request name="hello - GetHelloSOAP" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="ce936bf8-78a8-4d34-9145-f841b76f505b"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://qlapp00b.bicycle2.inspq.qc.ca/sx5-java-SOAP/java/soap</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://sx5.inspq.qc.ca/service/soap">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <soap:helloRequest>
+         <soap:nom>toto</soap:nom>
+      </soap:helloRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="80739e04-2822-43fe-a62a-91dbb2e0598c" name="SOAP Response"/><con:assertion type="Simple Contains" id="5a541db0-07be-4d12-8db1-98f813010a03" name="Contains Hello"><con:configuration><token>Hello</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://sx5.inspq.qc.ca/service/soap/Hello/helloRequest"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>

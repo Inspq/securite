@@ -1,0 +1,25 @@
+﻿@using ServicesUI.Models.ServicesUIViewModels
+@model IndexViewModel
+
+@{
+    ViewData["Title"] = "Test de la sécurité sur des services web en .NET";
+}
+<html>
+    <head>
+        <title>@ViewData["Title"]</title>
+    </head>
+    <body>
+        <h1>@ViewData["Title"]</h1>
+        <form method="post" action="ServicesUI/Appeler">
+            @Html.TextBoxFor(m => m.Nom, "")
+            <dl>
+                <dt>@Html.RadioButtonFor(m => m.Services, "C-R", false) @Html.Label("C# REST")</dt>
+                <dt>@Html.RadioButtonFor(m => m.Services, "C-S", false) @Html.Label("C# SOAP")</dt>
+                <dt>@Html.RadioButtonFor(m => m.Services, "J-R", false) @Html.Label("Java REST")</dt>
+                <dt>@Html.RadioButtonFor(m => m.Services, "J-S", false) @Html.Label("Java SOAP")</dt>
+            </dl>
+
+            <button type="submit">Shoot l'appel au service man!</button>
+        </form>
+    </body>
+</html>

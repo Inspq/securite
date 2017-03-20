@@ -1,0 +1,4 @@
+- name: Creer groupe
+  action: group name=${wso2.group}
+- name: Creer Usager
+  action: user name=${wso2.user} shell=/bin/bash 
