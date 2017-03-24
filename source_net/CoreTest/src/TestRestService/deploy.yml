@@ -2,7 +2,7 @@
 - hosts: app
   vars:
     docker_registry: nexus3.inspq.qc.ca:5000
-    sx5dotnetrest_internal_port: 50633
+    sx5dotnetrest_internal_port: "{{ sx5dotnetrest_internal_port }}"
     sx5dotnetrest_docker_image: "{{ docker_registry }}/inspq/sx5dotnetrest"
     
   roles:
@@ -35,7 +35,12 @@
       state: started
       restart_policy: unless-stopped
       ports:
-      - "{{ sx5dotnetrest_external_port }}:{{ sx5dotnetrest_internal_port }}"
+        - "{{ sx5dotnetrest_external_port }}:{{ sx5dotnetrest_internal_port }}"
+      env:
+        "AGENT_PWD": "{{sx5dotnetrest_agent_pwd}}"
+        "OPENAM_URL": "{{openam_url}}"
+        "AGENT_URL": "{{sx5dotnetrest_agent_url}}"
+        "AGENT_PROFILE_NAME": "{{sx5dotnetrest_agent_profile_name}}"
         
   - name: Creation du hote virtuel dans APACHE
     template:

@@ -40,6 +40,10 @@
         "JAVA_REST_BASE_URL": "http://{{ sx5javarest_base_url }}"
         "JAVA_SOAP_BASE_URL": "http://{{ sx5javasoap_base_url }}"
         "DOTNET_REST_BASE_URL": "http://{{ sx5dotnetrest_base_url }}"
+        "AGENT_PWD": "{{sx5javaui_agent_pwd}}"
+        "OPENAM_URL": "{{openam_url}}"
+        "AGENT_URL": "{{sx5javaui_agent_url}}"
+        "AGENT_PROFILE_NAME": "{{sx5javaui_agent_profile_name}}"      
         
   - name: Creation du hote virtuel dans APACHE
     template:

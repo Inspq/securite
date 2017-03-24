@@ -35,7 +35,12 @@
       state: started
       restart_policy: unless-stopped
       ports:
-      - "{{ sx5javasoap_external_port }}:{{ sx5javasoap_internal_port }}"
+        - "{{ sx5javasoap_external_port }}:{{ sx5javasoap_internal_port }}"
+      env:
+        "AGENT_PWD": "{{sx5javasoap_agent_pwd}}"
+        "OPENAM_URL": "{{openam_url}}"
+        "AGENT_URL": "{{sx5javasoap_agent_url}}"
+        "AGENT_PROFILE_NAME": "{{sx5javasoap_agent_profile_name}}"      
       
   - name: Creation du hote virtuel dans APACHE
     template:

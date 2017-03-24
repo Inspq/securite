@@ -35,7 +35,12 @@
       state: started
       restart_policy: unless-stopped
       ports:
-      - "{{ sx5javarest_external_port }}:{{ sx5javarest_internal_port }}"
+        - "{{ sx5javarest_external_port }}:{{ sx5javarest_internal_port }}"
+      env:
+        "AGENT_PWD": "{{sx5javarest_agent_pwd}}"
+        "OPENAM_URL": "{{openam_url}}"
+        "AGENT_URL": "{{sx5javarest_agent_url}}"
+        "AGENT_PROFILE_NAME": "{{sx5javarest_agent_profile_name}}"
       
   - name: Creation du hote virtuel dans APACHE
     template:

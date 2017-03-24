@@ -2,7 +2,7 @@
 - hosts: app
   vars:
     docker_registry: nexus3.inspq.qc.ca:5000
-    sx5dotnetui_internal_port: 5000
+    sx5dotnetui_internal_port: "{{ sx5dotnetui_external_port }}"
     sx5dotnetui_docker_image: "{{ docker_registry }}/inspq/sx5dotnetui"
     
   roles:
@@ -40,7 +40,11 @@
         "JAVA_REST_BASE_URL": "http://{{ sx5javarest_base_url }}"
         "JAVA_SOAP_BASE_URL": "http://{{ sx5javasoap_base_url }}"
         "DOTNET_REST_BASE_URL": "http://{{ sx5dotnetrest_base_url }}"
-        
+        "AGENT_PWD": "{{sx5dotnetui_agent_pwd}}"
+        "OPENAM_URL": "{{openam_url}}"
+        "AGENT_URL": "{{sx5dotnetui_agent_url}}"
+        "AGENT_PROFILE_NAME": "{{sx5dotnetui_agent_profile_name}}"
+   
   - name: Creation du hote virtuel dans APACHE
     template:
       src: sx5dotnetui-gabarit-apache.conf
