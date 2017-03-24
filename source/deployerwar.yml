@@ -1,0 +1,14 @@
+---
+- hosts: app
+  roles:
+    - { role: tomcat }
+    
+  tasks:
+   
+  - name: Deployer le WAR
+    copy: 
+      src: '{{ war_file }}'
+      dest: '{{ catalina_home }}/webapps' 
+      force: yes 
+      owner: '{{ tomcat_admin }}' 
+      group: '{{ tomcat_group }}'

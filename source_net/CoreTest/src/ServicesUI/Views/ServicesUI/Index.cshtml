@@ -14,9 +14,9 @@
             @Html.TextBoxFor(m => m.Nom, "")
             <dl>
                 <dt>@Html.RadioButtonFor(m => m.Services, "C-R", false) @Html.Label("C# REST")</dt>
-                <dt>@Html.RadioButtonFor(m => m.Services, "C-S", false) @Html.Label("C# SOAP")</dt>
+                <!--dt>@Html.RadioButtonFor(m => m.Services, "C-S", false) @Html.Label("C# SOAP")</dt-->
                 <dt>@Html.RadioButtonFor(m => m.Services, "J-R", false) @Html.Label("Java REST")</dt>
-                <dt>@Html.RadioButtonFor(m => m.Services, "J-S", false) @Html.Label("Java SOAP")</dt>
+                <!--dt>@Html.RadioButtonFor(m => m.Services, "J-S", false) @Html.Label("Java SOAP")</dt-->
             </dl>
 
             <button type="submit">Shoot l'appel au service man!</button>

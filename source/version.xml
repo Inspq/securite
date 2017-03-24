@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="versionAuto" default="versionInfo" basedir=".">
+	<description>
+		This ant file keeps the application version number updated
+	</description>
+	<loadproperties srcFile="./version.properties" />
+	
+	<target name="versionInfo">
+		<propertyfile file="./version.properties" comment="Build version info">
+			<entry key="dateCopyright" type="date" value="now" pattern="yyyy" />
+			<entry key="buildDate" type="date" value="now" pattern="ddMMyyyy" />
+			<entry key="buildNum" default="0000" type="int" operation="+"
+				value="1" pattern="0" />
+			<entry key="versionMaj" default="0" type="int" value="${versionMaj}"
+				pattern="0" />
+			<entry key="versionMin" default="0" type="int" value="${versionMin}"
+				pattern="0" />
+			<entry key="patchNum" default="0" type="int" value="${patchNum}" pattern="0" />
+			<entry key="buildType" default="SNAPSHOT" type="string" value="${build.type}"/>
+		</propertyfile>
+	</target>
+	
+	<target name="versionMaj">
+		<propertyfile file="./version.properties" comment="Build version info">
+			<entry key="dateCopyright" type="date" value="now" pattern="yyyy" />
+			<entry key="buildDate" type="date" value="now" pattern="ddMMyyyy" />
+			<entry key="buildNum" default="0000" type="int" operation="+"
+				value="1" pattern="0" />
+			<entry key="versionMaj" default="0" type="int" operation="+" value="1"
+				pattern="0" />
+			<entry key="versionMin" default="0" type="int" value="0"
+				pattern="0" />
+			<entry key="patchNum" default="0" type="int" value="0" pattern="0" />
+			<entry key="buildType" default="RELEASE" type="string" value="${build.type}"/>
+		</propertyfile>
+	</target>
+	<target name="versionMin">
+		<propertyfile file="./version.properties" comment="Build version info">
+			<entry key="dateCopyright" type="date" value="now" pattern="yyyy" />
+			<entry key="buildDate" type="date" value="now" pattern="ddMMyyyy" />
+			<entry key="buildNum" default="0000" type="int" operation="+"
+				value="1" pattern="0" />
+			<entry key="versionMaj" default="0" type="int" value="${versionMaj}"
+				pattern="0" />
+			<entry key="versionMin" default="0" type="int" operation="+" value="1"
+				pattern="0" />
+			<entry key="patchNum" default="0" type="int" value="0" pattern="0" />
+			<entry key="buildType" default="RELEASE" type="string" value="${build.type}"/>
+		</propertyfile>			
+	</target>
+	
+	<target name="versionPatch">
+		<propertyfile file="./version.properties" comment="Build version info">
+			<entry key="dateCopyright" type="date" value="now" pattern="yyyy" />
+			<entry key="buildDate" type="date" value="now" pattern="ddMMyyyy" />
+			<entry key="buildNum" default="0000" type="int" operation="+"
+				value="1" pattern="0" />
+			<entry key="versionMaj" default="0" type="int" value="${versionMaj}"
+				pattern="0" />
+			<entry key="versionMin" default="0" type="int" value="${versionMin}"
+				pattern="0" />
+			<entry key="patchNum" default="0" type="int" operation="+" value="1" 
+			    pattern="0" />
+			<entry key="buildType" default="RELEASE" type="string" value="${build.type}"/>
+		</propertyfile>			
+	</target>
+		
+</project>

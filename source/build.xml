@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="Construction Projet Sx5">
+	<!-- This script is used to package the DonctionsAllegees Project. 
+		Maven build need to be executed before to use this ANT script.
+	-->
+	<property name="packageName" value="Sx5Deploiement.zip"/>
+	<property name="deploymentProjectPath" value="../deploiement/Sx5Deploiement"/>
+	<property name="package.version" value="trunk"/>
+	<property name="build.type" value="SNAPSHOT"/>
+	<path id="ant.lib">
+		<fileset dir="antlib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<!-- Librairie SVN pour faire le commit de la version a la fin du build -->
+	<!--typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpath="lib/svnant.jar;lib/javasvn.jar;lib/svnClientAdapter.jar;lib/svnjavahl.jar" /-->
+	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml">
+		<classpath refid="ant.lib" />
+	</typedef>
+	<!--taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath refid="ant.lib" />
+	</taskdef-->
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+	   		<classpath refid="ant.lib"/>
+	</taskdef>
+	
+	<taskdef name="for" classname="net.sf.antcontrib.logic.ForTask">
+		<classpath refid="ant.lib" />
+	</taskdef>
+	<taskdef name="var" classname="net.sf.antcontrib.property.Variable">
+		<classpath refid="ant.lib" />
+	</taskdef>
+
+	<!-- define additional Ant tasks -->
+	<taskdef name="sshexec" classname="org.apache.tools.ant.taskdefs.optional.ssh.SSHExec">
+		<classpath refid="ant.lib" />
+	</taskdef>
+	<taskdef name="scp" classname="org.apache.tools.ant.taskdefs.optional.ssh.Scp">
+		<classpath refid="ant.lib" />
+	</taskdef>
+	<target name="build" depends="echoVersion,assemble,copyOnNim">
+	</target>
+	<target name="rebuild" depends="echoVersion,assemble">
+	</target>
+	<target name="tag" depends="echoVersion,assemble,copyTagOnNIM,svn-commit,svn-tag">
+	</target>
+
+	<target name="version-build">
+		<ant antfile="version.xml" target="versionInfo"/>
+		<antcall target="copyVersionPropertiesToWAR"/>
+	</target>
+
+	<target name="version-next">
+		<ant antfile="version.xml" target="${version.type}" />
+		<antcall target="copyVersionPropertiesToWAR"/>
+	</target>
+
+	<target name="copyVersionPropertiesToWAR">
+		<!-- Copier le fichier de version dans le WAR de l'IUS 
+		<copy file="version.properties" todir="FonctionsAllegeesIUS/src/main/resources" overwrite="true"/-->
+		<!-- Copier le fichier de version dans le WAR de fa-services 
+		<copy file="version.properties" todir="FonctionsAllegeesServices/src/main/resources" overwrite="true"/-->
+	</target>
+	<target name="cleanup">
+		<!--ant antfile="../SoapUITests/soapui-build.xml" dir="." target="cleanup"/-->
+
+		<delete dir="${deploymentProjectPath}/dss"/>
+		<delete dir="${deploymentProjectPath}/jar"/>
+		<delete dir="${deploymentProjectPath}/esb"/>
+		<delete dir="${deploymentProjectPath}/war"/>
+		<delete dir="${deploymentProjectPath}/deps"/>
+		
+		<delete file="${packageName}"/>
+		<delete file="${deploymentProjectPath}/version.properties"/>
+	</target>
+	<!-- Packing main task -->
+	<target name="assemble" depends="echoVersion">
+		<mkdir dir="${deploymentProjectPath}/war"/>
+		<!-- Copier les fichiers WAR dans le repertoire de deploiement -->
+		<copy todir="${deploymentProjectPath}/war" overwrite="true" flatten="true">
+			<fileset dir="..">
+				<include name="**/*.war" />
+				<type type="file" />
+			</fileset>
+		</copy>
+		<!-- Renommer les fichiers WAR -->
+		<path id="warfiles">
+			<fileset dir="${deploymentProjectPath}/war">
+		    	<include name="*.war"/>
+			</fileset>
+		</path>
+		<pathconvert property="war.files">
+			<path refid="warfiles" />
+		</pathconvert>
+
+		<for list="${war.files}" param="war.file" delimiter=":">
+			<sequential>
+				<var name="new.file.name" unset="true"/>
+				<propertyregex 
+				        property="new.file.name"
+				          input="@{war.file}"
+				          regexp="-[0-9]\.[0-9]\.[0-9]-${buildType}|-[0-9]\.[0-9]\.[0-9]|_[0-9]\.[0-9]\.[0-9]-${buildType}|_[0-9]\.[0-9]\.[0-9]"
+				          replace=""
+				          casesensitive="false" />
+			
+				<if>
+					<isset property="new.file.name"/>
+					<then>
+						<echo message="Renommer fichier : @{war.file} ${new.file.name}"/>
+						<move file="@{war.file}" tofile="${new.file.name}"/>
+					</then>
+				</if>
+			</sequential>
+		</for>
+		<mkdir dir="${deploymentProjectPath}/esb"/>
+		<!-- Copier les fichiers CAR de l'ESB dans le repertoire de deploiement 
+		<copy todir="${deploymentProjectPath}/esb" overwrite="true" flatten="true">
+			<fileset dir="FonctionsAllegeesESB">
+				<include name="**/*.car" />
+				<type type="file" />
+			</fileset>
+			<fileset dir="FonctionsAllegeesESB">
+				<include name="**/*.jar" />
+				<type type="file" />
+			</fileset>
+		</copy-->
+		<!-- Renommer les fichiers CAR et JAR de l'ESB 
+		<path id="esbfiles">
+			<fileset dir="${deploymentProjectPath}/esb">
+		    	<include name="*.car"/>
+			</fileset>
+			<fileset dir="${deploymentProjectPath}/esb">
+		    	<include name="fa*.jar"/>
+			</fileset>
+		</path>
+		<pathconvert property="esb.files">
+			<path refid="esbfiles" />
+		</pathconvert>
+
+		<for list="${esb.files}" param="esb.file" delimiter=":">
+			<sequential>
+				<var name="new.file.name" unset="true"/>
+				<propertyregex 
+				        property="new.file.name"
+				          input="@{esb.file}"
+				          regexp="_[0-9]\.[0-9]\.[0-9]-${buildType}|_[0-9]\.[0-9]\.[0-9]|-[0-9]\.[0-9]\.[0-9]-${buildType}|-[0-9]\.[0-9]\.[0-9]"
+				          replace=""
+				          casesensitive="false" />
+			
+				<if>
+					<isset property="new.file.name"/>
+					<then>
+						<echo message="Renommer fichier : @{esb.file} ${new.file.name}"/>
+						<move file="@{esb.file}" tofile="${new.file.name}"/>
+					</then>
+				</if>
+			</sequential>
+		</for-->
+		<!--mkdir dir="${deploymentProjectPath}/dss"/>
+		<copy todir="${deploymentProjectPath}/dss" overwrite="true" flatten="true">
+			<fileset dir="FonctionsAllegeesDSS">
+				<include name="**/*.car" />
+				<type type="file" />
+			</fileset>
+		</copy-->
+		<!-- Renommer les fichiers CAR du DSS -->
+		<!--path id="dssfiles">
+			<fileset dir="${deploymentProjectPath}/dss">
+		    	<include name="*.car"/>
+			</fileset>
+		</path>
+		<pathconvert property="dss.files">
+			<path refid="dssfiles" />
+		</pathconvert>
+
+		<for list="${dss.files}" param="dss.file" delimiter=":">
+			<sequential>
+				<var name="new.file.name" unset="true"/>
+				<propertyregex 
+				        property="new.file.name"
+				          input="@{dss.file}"
+				          regexp="_[0-9]\.[0-9]\.[0-9]-SNAPSHOT|_[0-9]\.[0-9]\.[0-9]"
+				          replace=""
+				          casesensitive="false" />
+				<if>
+					<isset property="new.file.name"/>
+					<then>			
+						<echo message="Renommer fichier : @{dss.file} ${new.file.name}"/>
+						<move file="@{dss.file}" tofile="${new.file.name}"/>
+					</then>
+				</if>
+			</sequential>
+		</for-->
+		<mkdir dir="${deploymentProjectPath}/jar/lib"/>
+		<!-- Copier les fichiers JAR de l'outil de sécurite dans le repertoire de deploiement 
+		<copy todir="${deploymentProjectPath}/jar" overwrite="true" flatten="true">
+			<fileset dir="FonctionsAllegeesSecurite/target">
+				<include name="*.jar" />
+				<type type="file" />
+			</fileset>
+		</copy>
+		<copy todir="${deploymentProjectPath}/jar/lib">
+			<fileset dir="FonctionsAllegeesSecurite/target/classes/lib">
+				<include name="*.jar" />
+				<type type="file" />
+			</fileset>
+		</copy-->
+		<!-- Renommer les fichiers WAR -->
+		<path id="jarfiles">
+			<fileset dir="${deploymentProjectPath}/jar">
+		    	<include name="*.jar"/>
+			</fileset>
+		</path>
+		<pathconvert property="jar.files">
+			<path refid="jarfiles" />
+		</pathconvert>
+
+		<for list="${jar.files}" param="jar.file" delimiter=":">
+			<sequential>
+				<var name="new.file.name" unset="true"/>
+				<propertyregex 
+				        property="new.file.name"
+				          input="@{jar.file}"
+				          regexp="-[0-9]\.[0-9]\.[0-9]-${buildType}|-[0-9]\.[0-9]\.[0-9]|_[0-9]\.[0-9]\.[0-9]-${buildType}|_[0-9]\.[0-9]\.[0-9]"
+				          replace=""
+				          casesensitive="false" />
+			
+				<if>
+					<isset property="new.file.name"/>
+					<then>
+						<echo message="Renommer fichier : @{jar.file} ${new.file.name}"/>
+						<move file="@{jar.file}" tofile="${new.file.name}"/>
+					</then>
+				</if>
+			</sequential>
+		</for>
+		<mkdir dir="${deploymentProjectPath}/deps"/>
+		<!-- Copier les dépendances dans le répertoire de deploiement -->
+		<copy todir="${deploymentProjectPath}/deps" overwrite="true" flatten="true">
+			<fileset dir="../WSO2">
+				<include name="**/*.zip" />
+				<type type="file" />
+			</fileset>
+			<fileset dir="../Tomcat">
+				<include name="**/*.zip" />
+				<type type="file" />
+			</fileset>
+		</copy>
+		<copy todir="${deploymentProjectPath}" file="./version.properties" overwrite="true" />
+
+		<!-- prepare zip file -->
+		<zip destfile="${packageName}" basedir="${deploymentProjectPath}/" />
+	</target>
+
+	<target name="copyOnNim">
+		<sshexec  
+	    	trust="true" append="true"
+	    	host="${nim.host}" 
+	    	username="${nim.user}"
+	    	keyfile="${nim.key.file}" 
+	    	command="mkdir -p ${nim.base.path}/${package.version}" />
+
+		<!-- delete old builds from the trunk directory on the NIM server -->
+		<sshexec host="${nim.host}" username="${nim.user}" trust="true" verbose="true" failonerror="false" keyfile="${nim.key.file}" passphrase="" command="rm ${nim.base.path}/${package.version}/${packageName}" />
+
+		<!--  send to nim server into the trunk subdirectory of PEFI nim.base.path 
+		 name: _${versionMaj}_${versionMin}_${patchNum}_${buildDate}_${buildNum}  -->
+		<scp 
+			file="${packageName}"
+			trust="true" 
+			verbose="true" 
+			keyfile="${nim.key.file}" 
+			todir="${nim.user}@${nim.host}:${nim.base.path}/${package.version}/" 
+			passphrase="" />
+
+	</target>
+	<target name="echoVersion">
+		<loadproperties srcFile="./version.properties" />
+		<echo message="**************************************************************" />
+		<echo message=" Fonctions Allegees Version  ${versionMaj}.${versionMin}.${patchNum}.${buildDate}.${buildNum}" />
+		<echo message="**************************************************************" />
+	</target>
+	<target name="svn-tag" depends="echoVersion">
+		<echo message="**************************************************************" />
+		<echo message=" Tag des fonctions allegees SI-PMI vers ${svn.tags.url}/${versionMaj}.${versionMin}.${patchNum}.${buildDate}.${buildNum} " />
+		<echo message="**************************************************************" />
+		<svn username="${svn.username}" password="${svn.password}">
+			<copy srcUrl="${svn.trunk.url}"
+		        destUrl="${svn.tags.url}/${versionMaj}.${versionMin}.${patchNum}.${buildDate}.${buildNum}" 
+		        message="Tag de la version ${versionMaj}.${versionMin}.${patchNum}.${buildDate}.${buildNum} des fonctions allegees SI-PMI par Hudson"/>
+		</svn>
+		<antcall target="copyTagOnNIM" />
+	</target>
+
+	<target name="copyTagOnNIM" >
+		<echo message="**************************************************************" />
+		<echo message=" Copie du Tag des fonctions allegees sur le serveur NIM ${nim.host}" />
+		<echo message=" dans le répertoire ${nim.base.path}/${versionMaj}.${versionMin}.${patchNum}.${buildDate}.${buildNum}" />
+		<echo message="**************************************************************" />
+		<sshexec  
+	    	trust="true" append="true"
+	    	host="${nim.host}" 
+	    	username="${nim.user}"
+	    	keyfile="${nim.key.file}" 
+	    	command="mkdir -p ${nim.base.path}/${versionMaj}.${versionMin}.${patchNum}.${buildDate}.${buildNum}" />
+		<scp 
+			file="${packageName}"
+			trust="true" 
+			verbose="true" 
+			keyfile="${nim.key.file}" 
+			todir="${nim.user}@${nim.host}:${nim.base.path}/${versionMaj}.${versionMin}.${patchNum}.${buildDate}.${buildNum}" 
+			passphrase="" />
+	</target>
+
+	<target name="svn-commit">
+		<!-- Commit new version related files and package -->
+		<svn username="${svn.username}" password="${svn.password}" failonerror="false">
+			<commit file="./version.properties" message="Version files update from Build Server" />
+			<commit message="POM files version updated by Build Server">
+				<fileset dir="." id="pom.xml.filesetid">
+    				<include name="**/pom.xml"/>
+				</fileset>
+			</commit>
+		</svn>
+
+	</target>
+
+	<target name="delete-tag">
+		<echo message="**************************************************************" />
+		<echo message=" Suppression du tag ${svn.tags.url}/${version.artefact} " />
+		<echo message="**************************************************************" />
+		<svn username="${svn.username}" password="${svn.password}">
+			<delete url="${svn.tags.url}/${version.artefact}" 
+		        message="Suppression du Tag ${version.artefact} par Hudson"/>
+		</svn>
+		<antcall target="deleteTagFromNIM" />
+	</target>
+	<target name="deleteTagFromNIM" >
+		<echo message="**************************************************************" />
+		<echo message=" Suppression du Tag du serveur NIM ${nim.host}" />
+		<echo message=" Repertoire ${nim.base.path}/${version.artefact}" />
+		<echo message="**************************************************************" />
+		<sshexec  
+	    	trust="true" append="true"
+	    	host="${nim.host}" 
+	    	username="${nim.user}"
+	    	keyfile="${nim.key.file}" 
+	    	command="rm -rf ${nim.base.path}/${version.artefact}" />
+	</target>
+
+
+</project>

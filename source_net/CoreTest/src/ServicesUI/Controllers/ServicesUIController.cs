@@ -7,6 +7,8 @@ using ServicesUI.Models.ServicesUIViewModels;
 using System.Net.Http;
 using SoapReference;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Session;
+using Microsoft.AspNetCore.Http;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,7 +17,7 @@ namespace ServicesUI.Controllers
     public class ServicesUIController : Controller
     {
         private readonly IOptions<ServicesUiConfig> config;
-
+        private String cookiesString;
         public ServicesUIController(IOptions<ServicesUiConfig> optionsAccessor)
         {
             this.config = optionsAccessor;
@@ -29,9 +31,17 @@ namespace ServicesUI.Controllers
         [HttpPost]
         public string Appeler(IndexViewModel model)
         {
+            // Lire les cookies de la session et les stocker dans une chaine de caractere.
+            foreach (var cookie in ControllerContext.HttpContext.Request.Cookies) {
+				cookiesString = cookiesString + cookie.Key + "=" + cookie.Value +";" ;
+			}
+            Console.WriteLine("cookiesString: " + cookiesString);
+            foreach(var header in ControllerContext.HttpContext.Request.Headers){
+                Console.WriteLine("header: " + header.Key + ": " + header.Value);
+            }
             if (model.Services.Equals("C-R"))
             {
-                //string retour = AppelerServiceRESTCSharp("http://localhost:50633", model.Nom).Result;
+                // Lire la valeur de la variable d'environnement contenant l'URL de base du service web Backend
                 string dotnetRestUrl = Environment.GetEnvironmentVariable("DOTNET_REST_BASE_URL");
                 if (dotnetRestUrl == null){
                     dotnetRestUrl = config.Value.CRHostname;
@@ -44,12 +54,11 @@ namespace ServicesUI.Controllers
                 return retour;
             } else if (model.Services.Equals("J-R"))
             {
+                // Lire la valeur de la variable d'environnement contenant l'URL de base du service web Backend
                 string javaRestUrl = Environment.GetEnvironmentVariable("JAVA_REST_BASE_URL");
                 if (javaRestUrl == null){
                     javaRestUrl = config.Value.JRHostname;
                 }
-
-                //string retour = AppelerServiceRESTJava("http://localhost:8080", model.Nom).Result;
                 string retour = AppelerServiceRESTJava(javaRestUrl, model.Nom).Result;
                 return retour;
             }
@@ -61,10 +70,13 @@ namespace ServicesUI.Controllers
             string message = "";
             using (HttpClient client = new HttpClient())
             {
+                // Creer un client Http pour l'URL de base du service web.
                 client.BaseAddress = new Uri(url);
                 client.DefaultRequestHeaders.Accept.Clear();
+                // Ajouter le header Cookie contenant l'ensemble des cookies de la session actuelle dans le client Http.
+                client.DefaultRequestHeaders.Add("Cookie",cookiesString);
 
-                //HttpResponseMessage response = await client.GetAsync(String.Format("api/rest/helloworld/{0}", nom));
+                // Appeler le service
                 HttpResponseMessage response = await client.GetAsync(String.Format(config.Value.CRUri, nom));
                 if (response.IsSuccessStatusCode)
                 {
@@ -89,7 +101,8 @@ namespace ServicesUI.Controllers
             {
                 client.BaseAddress = new Uri(url);
                 client.DefaultRequestHeaders.Accept.Clear();
-                    //HttpResponseMessage response = await client.GetAsync(String.Format("sx5-java-REST/java/rest/hello?nom={0}", nom));
+                client.DefaultRequestHeaders.Add("Cookie", cookiesString);
+                //HttpResponseMessage response = await client.GetAsync(String.Format("sx5-java-REST/java/rest/hello?nom={0}", nom));
                 HttpResponseMessage response = await client.GetAsync(String.Format(config.Value.JRUri, nom));
                 if (response.IsSuccessStatusCode)
                 {
@@ -97,6 +110,11 @@ namespace ServicesUI.Controllers
                 }
             }
             return message;
+        }
+
+        private static HttpClient GetClient(HttpClient client)
+        {
+            return client;
         }
     }
 }

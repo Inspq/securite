@@ -1,0 +1,51 @@
+---
+- hosts: app
+  vars:
+    docker_registry: nexus3.inspq.qc.ca:5000
+    sx5javarest_internal_port: 8080
+    sx5javarest_docker_image: "{{ docker_registry }}/inspq/sx5javarest"
+    
+  roles:
+  - docker-engine
+      
+  tasks:
+
+  - name: Docker repository logon
+    shell: docker login -u {{ docker_registry_username }} -p  {{ docker_registry_password }} -e {{ docker_registry_email }} {{ docker_registry }}
+    when: docker_registry_username is defined and docker_registry_password is defined and docker_registry_email is defined
+
+  - name: Suppression du conteneur pour sx5javarest 
+    docker:
+      name: "{{ sx5javarest_container_name }}"
+      image: "{{ sx5javarest_docker_image }}:{{ sx5javarest_image_version }}"
+      state: absent
+    
+  - name: Mettre a jour l'image Docker
+    docker_image: 
+      name: "{{ sx5javarest_docker_image }}"
+      tag: "{{ sx5javarest_image_version }}"
+      pull: true
+      state: present
+      force: yes
+      
+  - name: Creation du conteneur pour sx5javarest 
+    docker_container:
+      name: "{{ sx5javarest_container_name }}"
+      image: "{{ sx5javarest_docker_image }}:{{ sx5javarest_image_version }}"
+      state: started
+      restart_policy: unless-stopped
+      ports:
+      - "{{ sx5javarest_external_port }}:{{ sx5javarest_internal_port }}"
+      
+  - name: Creation du hote virtuel dans APACHE
+    template:
+      src: sx5javarest-gabarit-apache.conf
+      dest: /etc/httpd/conf.d/{{ sx5javarest_base_url }}.conf
+      force: yes
+    when: sx5javarest_base_url is defined
+    notify:
+      - restart httpd  
+      
+  handlers:
+  - name: restart httpd 
+    service: name=httpd state=restarted

@@ -21,6 +21,11 @@ services:
     network_mode: "bridge"
     ports:
       - "8888:8080"
+    environment:
+      - AGENT_PWD=${AGENT_PWD}
+      - OPENAM_URL=http://${FQDN}:8893/openam
+      - AGENT_URL=http://${FQDN}:8889/agentapp
+      - AGENT_PROFILE_NAME=sx5javarest
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/sx5-java-REST/java/rest/hello?nom=toto"]
       interval: 30s
@@ -33,6 +38,11 @@ services:
     network_mode: "bridge"
     ports:
       - "8889:8080"
+    environment:
+      - AGENT_PWD=${AGENT_PWD}
+      - OPENAM_URL=http://${FQDN}:8893/openam
+      - AGENT_URL=http://${FQDN}:8889/agentapp
+      - AGENT_PROFILE_NAME=sx5javasoap
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/sx5-java-SOAP/java/soap/hello.wsdl"]
       interval: 30s
@@ -43,33 +53,40 @@ services:
     container_name: sx5dotnetrest
     image: elfelip/sx5dotnetrest
     network_mode: "bridge"
+    environment:
+      - AGENT_PWD=${AGENT_PWD}
+      - OPENAM_URL=http://${FQDN}:8893/openam
+      - AGENT_URL=http://${FQDN}:8890/
+      - AGENT_PROFILE_NAME=sx5dotnetrest
     ports:
-      - "8890:50633"
+      - "8890:8890"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:50633/api/rest/helloworld/toto"]
       interval: 30s
       timeout: 60s
       retries: 5
     
-  gw:
-    container_name: openig
-    image: elfelip/openig
-    network_mode: "bridge"
-    ports:
-      - "8894:8080"
-    environment:
-      - OPENAM_URL=http://${FQDN}:8893/openam
-      - POLICY_ADMIN=amAdmin
-      - POLICY_ADMIN_PWD=Pan0rama
-    links:
-      - javarestapi
-      - javasoapapi
-      - dotnetrestapi
-    depends_on:
-      - javarestapi
-      - javasoapapi
-      - dotnetrestapi
-      - idm
+#  gw:
+#    container_name: openig
+#    image: elfelip/openig
+#    network_mode: "bridge"
+#    ports:
+#      - "8894:8080"
+#    environment:
+#      - OPENAM_URL=http://${FQDN}:8893/openam
+#      - POLICY_ADMIN=amAdmin
+#      - POLICY_ADMIN_PWD=password
+#    volumes:
+#      - "/opt/openig:/var/openig"
+#    links:
+#      - javarestapi
+#      - javasoapapi
+#      - dotnetrestapi
+#    depends_on:
+#      - javarestapi
+#      - javasoapapi
+#      - dotnetrestapi
+#      - idm
             
   javaweb:
     container_name: sx5javaui
@@ -90,7 +107,7 @@ services:
       - javasoapapi
       - dotnetrestapi
       - idm
-      - gw
+#      - gw
       
   dotnetweb:
     container_name: sx5dotnetui
@@ -111,6 +128,4 @@ services:
       - javasoapapi
       - dotnetrestapi
       - idm
-      - gw
-
-      
+ #     - gw
