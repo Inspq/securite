@@ -1,4 +1,4 @@
-FROM elfelip/tomcat:8.0.41
+FROM nexus3.inspq.qc.ca:5000/tomcat:8.0.41
 
 ENV JDK_VERSION_MAJ 1
 ENV JDK_VERSION_MIN 8

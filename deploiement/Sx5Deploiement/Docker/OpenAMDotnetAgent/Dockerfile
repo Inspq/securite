@@ -1,4 +1,5 @@
-from elfelip/dotnet:1.0.4
+from nexus3.inspq.qc.ca:5000/inspq/dotnet:1.0.4
+
 RUN yum install -y wget java7 httpd unzip links
 
 ARG WEB_AGENT_URL=https://nexus3.inspq.qc.ca:8443/repository/utilitaires-web/
@@ -8,13 +9,3 @@ RUN unzip /tmp/web-agent.zip -d /opt
 
 ADD configAgent.sh /tmp/configAgent.sh
 RUN chmod 755 /tmp/configAgent.sh
-
-ARG RUNTIME=centos.7-x64
-ARG CONFIG=Release
-ADD bin/$CONFIG/netcoreapp1.1/$RUNTIME/publish /opt/TestRestService
-
-EXPOSE 50633
-
-WORKDIR /opt/TestRestService
-#CMD dotnet exec TestRestService.dll
-CMD /tmp/configAgent.sh
