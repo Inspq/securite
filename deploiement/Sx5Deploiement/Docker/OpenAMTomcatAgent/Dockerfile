@@ -22,6 +22,8 @@ RUN unzip /tmp/tomcat-agent.zip -d /opt
 ADD configAgent.sh /tmp/configAgent.sh
 RUN chmod 755 /tmp/configAgent.sh
 
+ADD tomcat-conf-web.xml $CATALINA_HOME/conf/web.xml
+
 EXPOSE 8080 8009
 
 CMD ["/tmp/configAgent.sh"]
