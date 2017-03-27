@@ -36,13 +36,13 @@ namespace scratch
             app.UseStaticFiles();
 
             // add openid
-            //app.UseCookieAuthentication(new CookieAuthenticationOptions()
-            //{
-            //    AuthenticationScheme = "Cookies",
-            //    CookieName = "Cookies",
-            //    AutomaticAuthenticate = true,
-            //    ExpireTimeSpan = TimeSpan.FromMinutes(60)
-            //});
+            app.UseCookieAuthentication(new CookieAuthenticationOptions()
+            {
+                AuthenticationScheme = "Cookies",
+                CookieName = "Cookies",
+                AutomaticAuthenticate = true,
+                ExpireTimeSpan = TimeSpan.FromMinutes(60)
+            });
 
             //app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions()
             //{

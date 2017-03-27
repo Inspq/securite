@@ -14,6 +14,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+using System.Security.Cryptography;
 
 namespace services
 {
@@ -38,49 +39,27 @@ namespace services
 
             //app.UseMiddleware<InspqOpenIdConnectMiddleware>();
 
-            //app.UseCookieAuthentication(new CookieAuthenticationOptions()
-            //{
-            //    AuthenticationScheme = "Cookies",
-            //    CookieName = "Cookies",
-            //    AutomaticAuthenticate = true,
-            //    ExpireTimeSpan = TimeSpan.FromMinutes(60)
-            //});
-
-            const string secretKey = "U1igWAy15RKhnkJHMN5J_Y_3";
-            SymmetricSecurityKey signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-            SigningCredentials signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.RsaSha256);
+            app.UseCookieAuthentication(new CookieAuthenticationOptions()
+            {
+                AuthenticationScheme = "Cookies",
+                CookieName = "Cookies",
+                AutomaticAuthenticate = true,
+                ExpireTimeSpan = TimeSpan.FromMinutes(60)
+            });
 
             app.UseJwtBearerAuthentication(new JwtBearerOptions()
             {
                 AutomaticChallenge = true,
                 AutomaticAuthenticate = true,
+                Authority = "https://accounts.google.com",
                 TokenValidationParameters = new TokenValidationParameters()
                 {
-                    AuthenticationType = "Bearer",
-                    RequireSignedTokens = false,
-                    ValidateActor = false,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = signingKey,
-                    ValidateIssuer = false,
-                    //ValidIssuer = "https://accounts.google.com",
-                    ValidateAudience = false,
-                    //ValidAudience = "518663208756-do0306qmhi6k721v92m9bfaaknsain8s.apps.googleusercontent.com",
-                    ValidateLifetime = false
-                },
-                Events = new JwtBearerEvents()
-                {
-                    OnMessageReceived = context =>
-                    {
-                        return Task.FromResult(0);
-                    },
-                    OnChallenge = context =>
-                    {
-                        return Task.FromResult(0);
-                    },
-                    OnTokenValidated = context =>
-                    {
-                        return Task.FromResult(0);
-                    }
+                    ValidateIssuer = true,
+                    ValidIssuer = "https://accounts.google.com",
+                    ValidateAudience = true,
+                    ValidAudience = "518663208756-do0306qmhi6k721v92m9bfaaknsain8s.apps.googleusercontent.com",
+                    ValidateLifetime = true
                 }
             });
 
