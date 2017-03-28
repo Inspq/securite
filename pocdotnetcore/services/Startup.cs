@@ -60,6 +60,27 @@ namespace services
                     ValidateAudience = true,
                     ValidAudience = "518663208756-do0306qmhi6k721v92m9bfaaknsain8s.apps.googleusercontent.com",
                     ValidateLifetime = true
+                },
+                Events = new JwtBearerEvents()
+                {
+                    OnTokenValidated = context =>
+                    {
+                        String jwtTokenString = context.SecurityToken.ToString();
+                        var identity = context.Ticket.Principal.Identity as ClaimsIdentity;
+                        if (identity != null)
+                        {
+                            if (!context.Ticket.Principal.HasClaim(c => c.Type == ClaimTypes.Name) &&
+                                identity.HasClaim(c => c.Type == "name"))
+                            {
+                                identity.AddClaim(new Claim(ClaimTypes.Name, identity.FindFirst("name").Value));
+                            }
+                        }
+
+                        CookieOptions options = new CookieOptions();
+                        options.Expires = DateTime.Now.AddDays(1);
+                        context.Response.Cookies.Append("iPlanetDirectoryPro", jwtTokenString, options);
+                        return Task.FromResult(0);
+                    }
                 }
             });
 

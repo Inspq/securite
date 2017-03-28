@@ -23,7 +23,7 @@ namespace services.Controllers
         [Authorize]
         public IEnumerable<string> GetAuth()
         {
-            return new string[] { "valueauth", "ohyeah" };
+            return new string[] { "valueauth", "ohyeah", User.Identity.Name };
         }
 
         // GET api/values/5
