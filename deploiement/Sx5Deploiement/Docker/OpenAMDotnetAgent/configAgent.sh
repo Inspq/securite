@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script d'installation de l'agent web d'OpenAM 
+# Script d'installation de l'agent web d'OpenAM
 # Arguments: 
 #	virtualhost name: Nom a donner a la configuration de l'hôte virtuel
 #	dll: Fichier dll dotnet core a exécuter
