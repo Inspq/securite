@@ -1,0 +1,5 @@
+﻿################################################################################
+# Ce fichier .gitignore a été automatiquement créé par Microsoft(R) Visual Studio.
+################################################################################
+
+/pocdotnetcore/scratch/bin/Debug/netcoreapp1.1
