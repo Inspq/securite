@@ -1,12 +1,13 @@
 version: "3"
 
 services:
-  idm:
+  openam:
     container_name: openam
     image: elfelip/openam
     volumes:
       - "/opt/openam/root:/root"
-    network_mode: "bridge"
+    networks: 
+      - poc.inspq.qc.ca
     ports:
       - "8893:8080"
     healthcheck:
@@ -15,48 +16,33 @@ services:
       timeout: 60s
       retries: 5
       
-  javarestapi:
+  sx5javarest:
     container_name: sx5javarest
     image: elfelip/sx5javarest
-    network_mode: "bridge"
+    networks: 
+      - poc.inspq.qc.ca
     ports:
       - "8888:8080"
     environment:
       - AGENT_PWD=${AGENT_PWD}
       - OPENAM_URL=http://${FQDN}:8893/openam
-      - AGENT_URL=http://${FQDN}:8889/agentapp
+      - AGENT_URL=http://sx5javarest.poc.inspq.qc.ca:8080/agentapp
       - AGENT_PROFILE_NAME=sx5javarest
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/sx5-java-REST/java/rest/hello?nom=toto"]
       interval: 30s
       timeout: 60s
       retries: 5
-  
-  javasoapapi:
-    container_name: sx5javasoap
-    image: elfelip/sx5javasoap
-    network_mode: "bridge"
-    ports:
-      - "8889:8080"
-    environment:
-      - AGENT_PWD=${AGENT_PWD}
-      - OPENAM_URL=http://${FQDN}:8893/openam
-      - AGENT_URL=http://${FQDN}:8889/agentapp
-      - AGENT_PROFILE_NAME=sx5javasoap
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/sx5-java-SOAP/java/soap/hello.wsdl"]
-      interval: 30s
-      timeout: 60s
-      retries: 5
-    
-  dotnetrestapi:
+      
+  sx5dotnetrest:
     container_name: sx5dotnetrest
     image: elfelip/sx5dotnetrest
-    network_mode: "bridge"
+    networks: 
+      - poc.inspq.qc.ca
     environment:
       - AGENT_PWD=${AGENT_PWD}
       - OPENAM_URL=http://${FQDN}:8893/openam
-      - AGENT_URL=http://${FQDN}:8890/
+      - AGENT_URL=http://sx5dotnetrest.poc.inspq.qc.ca:8890/
       - AGENT_PROFILE_NAME=sx5dotnetrest
     ports:
       - "8890:8890"
@@ -66,66 +52,44 @@ services:
       timeout: 60s
       retries: 5
     
-#  gw:
-#    container_name: openig
-#    image: elfelip/openig
-#    network_mode: "bridge"
-#    ports:
-#      - "8894:8080"
-#    environment:
-#      - OPENAM_URL=http://${FQDN}:8893/openam
-#      - POLICY_ADMIN=amAdmin
-#      - POLICY_ADMIN_PWD=password
-#    volumes:
-#      - "/opt/openig:/var/openig"
-#    links:
-#      - javarestapi
-#      - javasoapapi
-#      - dotnetrestapi
-#    depends_on:
-#      - javarestapi
-#      - javasoapapi
-#      - dotnetrestapi
-#      - idm
-            
-  javaweb:
+  sx5javaui:
     container_name: sx5javaui
     image: elfelip/sx5javaui
-    network_mode: "bridge"
+    networks: 
+      - poc.inspq.qc.ca
     ports:
       - 8891:8080
     environment:
-      - JAVA_REST_BASE_URL=http://${FQDN}:8888
-      - JAVA_SOAP_BASE_URL=http://${FQDN}:8889
-      - DOTNET_REST_BASE_URL=http://${FQDN}:8890
+      - JAVA_REST_BASE_URL=http://sx5javarest.poc.inspq.qc.ca:8080
+      - DOTNET_REST_BASE_URL=http://sx5dotnetrest.poc.inspq.qc.ca:8890
       - AGENT_PWD=${AGENT_PWD}
       - OPENAM_URL=http://${FQDN}:8893/openam
-      - AGENT_URL=http://${FQDN}:8891/agentapp
+      - AGENT_URL=http:/${FQDN}:8891/agentapp
       - AGENT_PROFILE_NAME=sx5javaui
     depends_on:
-      - javarestapi
-      - javasoapapi
-      - dotnetrestapi
-      - idm
-#      - gw
+      - sx5javarest
+      - sx5dotnetrest
+      - openam
       
-  dotnetweb:
+  sx5dotnetui:
     container_name: sx5dotnetui
     image: elfelip/sx5dotnetui
-    network_mode: "bridge"
+    networks: 
+      - poc.inspq.qc.ca
     ports:
       - 8892:8892
     environment:
-      - JAVA_REST_BASE_URL=http://${FQDN}:8888
-      - JAVA_SOAP_BASE_URL=http://${FQDN}:8889
-      - DOTNET_REST_BASE_URL=http://${FQDN}:8890
+      - JAVA_REST_BASE_URL=http://sx5javarest.poc.inspq.qc.ca:8080
+      - DOTNET_REST_BASE_URL=http://sx5dotnetrest.poc.inspq.qc.ca:8890
       - AGENT_PWD=${AGENT_PWD}
       - OPENAM_URL=http://${FQDN}:8893/openam
       - AGENT_URL=http://${FQDN}:8892/
       - AGENT_PROFILE_NAME=sx5dotnetui
     depends_on:
-      - javarestapi
-      - javasoapapi
-      - dotnetrestapi
-      - idm
- #     - gw
+      - sx5javarest
+      - sx5dotnetrest
+      - openam
+ 
+networks:
+  poc.inspq.qc.ca:
+    external: true

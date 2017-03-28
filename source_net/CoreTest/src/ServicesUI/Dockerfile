@@ -1,4 +1,4 @@
-from elfelip/openamdotnetwebagent:4.0.0
+FROM elfelip/openamdotnetwebagent:4.0.0
 
 ARG RUNTIME=centos.7-x64
 ARG CONFIG=Release

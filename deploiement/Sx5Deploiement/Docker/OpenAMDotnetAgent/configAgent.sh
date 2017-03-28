@@ -7,6 +7,7 @@
 set -e
 VIRTUAL_HOST_NAME=$1
 DOTNET_DLL=$2
+KESTREL_PORT=$3
 AGENT_PROTO=`echo $AGENT_URL | awk -F: '{print $1}'`
 AGENT_HOSTNAME=`echo $AGENT_URL | awk -F '[/:]' '{print $4}'`
 AGENT_PORT=`echo $AGENT_URL | awk -F '[/:]' '{print $5}'`
@@ -20,8 +21,8 @@ if [ ! -e /etc/httpd/conf.d/${VIRTUAL_HOST_NAME}.conf ]; then
     echo "            Order deny,allow" >> /etc/httpd/conf.d/${VIRTUAL_HOST_NAME}.conf
     echo "            Allow from all" >> /etc/httpd/conf.d/${VIRTUAL_HOST_NAME}.conf
     echo "    </Proxy>" >> /etc/httpd/conf.d/${VIRTUAL_HOST_NAME}.conf
-    echo "    ProxyPass / http://localhost:50633/" >> /etc/httpd/conf.d/${VIRTUAL_HOST_NAME}.conf
-    echo "    ProxyPassReverse / http://localhost:50633/" >> /etc/httpd/conf.d/${VIRTUAL_HOST_NAME}.conf
+	echo "    ProxyPass / http://localhost:${KESTREL_PORT}/" >> /etc/httpd/conf.d/${VIRTUAL_HOST_NAME}.conf
+    echo "    ProxyPassReverse / http://localhost:${KESTREL_PORT}/" >> /etc/httpd/conf.d/${VIRTUAL_HOST_NAME}.conf
     echo "</VirtualHost>" >> /etc/httpd/conf.d/${VIRTUAL_HOST_NAME}.conf
 
     sed -i s'/Listen 80/Listen '"${AGENT_PORT}"'/g' /etc/httpd/conf/httpd.conf
