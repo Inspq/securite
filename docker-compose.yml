@@ -1,0 +1,129 @@
+version: "3"
+
+services:
+  openam:
+    container_name: openam
+    image: elfelip/openam
+    hostname: openam
+    domainname: poc.inspq.qc.ca
+    volumes:
+      - "/opt/openam/root:/root"
+    networks: 
+      - poc.inspq.qc.ca
+    ports:
+      - "8893:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/openam"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+    
+  sx5javarest:
+    container_name: sx5javarest
+    build:
+      context: ./source/sx5-java-REST
+    image: sx5javarest
+    networks: 
+      - poc.inspq.qc.ca
+    hostname: sx5javarest
+    domainname: poc.inspq.qc.ca
+    ports:
+      - "8888:8080"
+    environment:
+      - AGENT_PWD=${AGENT_PWD}
+      - OPENAM_URL=http://${FQDN}:8893/openam
+      - AGENT_URL=http://sx5javarest.poc.inspq.qc.ca:8080/agentapp
+      - AGENT_PROFILE_NAME=sx5javarest
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/sx5-java-REST/java/rest/hello?nom=toto"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+    depends_on:
+      - openam
+        
+  sx5dotnetrest:
+    container_name: sx5dotnetrest
+    build:
+      context: ./source_net/CoreTest/src/TestRestService
+
+    image: sx5dotnetrest
+    hostname: sx5dotnetrest
+    domainname: poc.inspq.qc.ca
+    networks:
+      - poc.inspq.qc.ca
+    environment:
+      - AGENT_PWD=${AGENT_PWD}
+      - OPENAM_URL=http://${FQDN}:8893/openam
+      - AGENT_URL=http://sx5dotnetrest.poc.inspq.qc.ca:8890/
+      - AGENT_PROFILE_NAME=sx5dotnetrest
+    ports:
+      - "8890:8890"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:50633/api/rest/helloworld/toto"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+    depends_on:
+      - openam
+ 
+  sx5javaui:
+    container_name: sx5javaui
+    build:
+      context: ./source/sx5-java-UI
+    image: sx5javaui
+    hostname: sx5javaui
+    domainname: poc.inspq.qc.ca
+    networks:
+      - poc.inspq.qc.ca
+    ports:
+      - 8891:8080
+    environment:
+      - JAVA_REST_BASE_URL=http://sx5javarest.poc.inspq.qc.ca:8080
+      - DOTNET_REST_BASE_URL=http://sx5dotnetrest.poc.inspq.qc.ca:8890
+      - AGENT_PWD=${AGENT_PWD}
+      - OPENAM_URL=http://${FQDN}:8893/openam
+      - AGENT_URL=http://${FQDN}:8891/agentapp
+      - AGENT_PROFILE_NAME=sx5javaui
+    depends_on:
+      - sx5javarest
+      - sx5dotnetrest
+      - openam
+      
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/sx5-java-UI/"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+
+  sx5dotnetui:
+    container_name: sx5dotnetui
+    build:
+      context: ./source_net/CoreTest/src/ServicesUI    
+    image: sx5dotnetui
+    hostname: sx5dotnetui
+    domainname: poc.inspq.qc.ca
+    networks:
+      - poc.inspq.qc.ca
+    ports:
+      - 8892:8892
+    environment:
+      - JAVA_REST_BASE_URL=http://sx5javarest.poc.inspq.qc.ca:8080
+      - DOTNET_REST_BASE_URL=http://sx5dotnetrest.poc.inspq.qc.ca:8890
+      - AGENT_PWD=${AGENT_PWD}
+      - OPENAM_URL=http://${FQDN}:8893/openam
+      - AGENT_URL=http://${FQDN}:8892/
+      - AGENT_PROFILE_NAME=sx5dotnetui
+    depends_on:
+      - sx5javarest
+      - sx5dotnetrest
+      - openam
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8892/"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+networks:
+  poc.inspq.qc.ca:
+    external: true
+    

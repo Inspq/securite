@@ -39,7 +39,6 @@ public class Sx5JavaUi extends UI{
 	private OptionGroup options;
 	private TextArea resultat;
 	@Autowired
-	private HelloJavaSoapClient client;
 	private Cookie[] cookies;
 	
 	@Override
@@ -120,12 +119,7 @@ public class Sx5JavaUi extends UI{
 			Hello hello = respEntity.getBody();
 			resultat.setValue("Bonjour " + hello.getHello() + " du service " + options.getValue());
 		} else {
-			if (options.getValue().equals("Java SOAP")){
-				 
-				resultat.setValue("Bonjour " + client.getHello(textNom.getValue()).getHello() + " du service " + options.getValue());
-			} else {
-				resultat.setValue("Cette methode n'a pas été implémentée");
-			}
+			resultat.setValue("Cette methode n'a pas été implémentée");
 		}
 	}
 }

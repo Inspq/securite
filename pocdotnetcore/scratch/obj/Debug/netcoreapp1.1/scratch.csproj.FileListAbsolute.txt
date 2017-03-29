@@ -1,0 +1,8 @@
+/home/gauphi01@inspq.qc.ca/git/securite/pocdotnetcore/scratch/bin/Debug/netcoreapp1.1/scratch.deps.json
+/home/gauphi01@inspq.qc.ca/git/securite/pocdotnetcore/scratch/bin/Debug/netcoreapp1.1/scratch.runtimeconfig.json
+/home/gauphi01@inspq.qc.ca/git/securite/pocdotnetcore/scratch/bin/Debug/netcoreapp1.1/scratch.runtimeconfig.dev.json
+/home/gauphi01@inspq.qc.ca/git/securite/pocdotnetcore/scratch/bin/Debug/netcoreapp1.1/scratch.dll
+/home/gauphi01@inspq.qc.ca/git/securite/pocdotnetcore/scratch/bin/Debug/netcoreapp1.1/scratch.pdb
+/home/gauphi01@inspq.qc.ca/git/securite/pocdotnetcore/scratch/obj/Debug/netcoreapp1.1/scratch.AssemblyInfo.cs
+/home/gauphi01@inspq.qc.ca/git/securite/pocdotnetcore/scratch/obj/Debug/netcoreapp1.1/scratch.dll
+/home/gauphi01@inspq.qc.ca/git/securite/pocdotnetcore/scratch/obj/Debug/netcoreapp1.1/scratch.pdb
