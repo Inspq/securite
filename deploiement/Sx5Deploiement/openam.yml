@@ -36,6 +36,7 @@
         name: "{{ container_name }}"
         image: "{{ docker_image }}:{{ docker_image_version }}"
         state: started
+        restart_policy: unless-stopped
         ports:
         - "{{ openam_port_host }}:{{ openam_port_container }}"
         - "{{ openam_ajp_port_host }}:{{ openam_ajp_port_container }}"

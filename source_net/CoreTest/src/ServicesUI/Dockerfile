@@ -8,4 +8,4 @@ EXPOSE 5000
 
 WORKDIR /opt/ServicesUI
 #CMD dotnet exec ServicesUI.dll
-CMD /tmp/configAgent.sh sx5dotnetui ServicesUI.dll
+CMD /tmp/configAgent.sh sx5dotnetui ServicesUI.dll 5000
