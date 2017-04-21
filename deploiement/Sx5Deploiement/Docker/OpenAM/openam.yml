@@ -1,0 +1,58 @@
+- name: Creation du Conteneur
+  hosts: idm
+  vars:
+    mod_jk_version: 1.2.42
+    app: openam
+  tasks:
+    - name: Installation des packages pre-requis
+      yum: 
+        name: "{{ item }}"
+        state: present
+      with_items:
+       - docker-engine
+       - python-pip
+       - httpd-devel
+       - libtool
+       - apr 
+       - apr-devel
+       - apr-util
+       - apr-util-devel
+    
+    - name: Demarrage de Docker
+      service: name=docker state=started
+        
+    - name: Docker-PY
+      pip:
+        name: "{{ item }}"
+      with_items:
+      - docker-py==1.5.0
+      
+    - name: Conteneur OpenAM
+      docker:
+        name: "{{ container_name }}"
+        image: "{{ docker_image }}:{{ docker_image_version }}"
+        state: started
+        restart_policy: unless-stopped
+        ports:
+        - "{{ openam_port_host }}:{{ openam_port_container }}"
+        - "{{ openam_ajp_port_host }}:{{ openam_ajp_port_container }}"
+        - "{{ opends_admin_port_host }}:{{ opends_admin_port_container }}"
+        - "{{ opends_jmx_port_host }}:{{ opends_jmx_port_container }}"
+        - "{{ opends_ldap_port_host }}:{{ opends_ldap_port_container }}"
+        volumes:
+        - "{{ openam_basedir_host }}:{{ openam_basedir_container }}"
+        
+    - name: Creation du hote virtuel dans APACHE
+      template:
+        src: openam-gabarit-apache.conf
+        dest: /etc/httpd/conf.d/{{ openam_base_url }}.conf
+        force: yes
+      when: openam_base_url is defined
+      notify:
+        - restart httpd  
+      
+  handlers:
+  - name: restart httpd 
+    service: name=httpd state=restarted
+
+             

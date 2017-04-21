@@ -25,7 +25,7 @@ if [ ! -e /opt/j2ee_agents/tomcat_v6_agent/Agent_001/config/OpenSSOAgentBootstra
 	curl -f -m 60 --retry 5 --retry-delay 30 $OPENAM_URL
 	
 	/opt/j2ee_agents/tomcat_v6_agent/bin/agentadmin --install --acceptLicense --useResponse /tmp/j2ee-agent.rsp
-sed -i s'/'"${TMP_PORT}"'/'"${AGENT_PORT}"'/g' /opt/j2ee_agents/tomcat_v6_agent/Agent_001/config/OpenSSOAgentBootstrap.properties
+	sed -i s'/'"${TMP_PORT}"'/'"${AGENT_PORT}"'/g' /opt/j2ee_agents/tomcat_v6_agent/Agent_001/config/OpenSSOAgentBootstrap.properties
 	sed -i s'/'"${TMP_PORT}"'/'"${AGENT_PORT}"'/g' /opt/j2ee_agents/tomcat_v6_agent/Agent_001/config/OpenSSOAgentConfiguration.properties
 fi
 
