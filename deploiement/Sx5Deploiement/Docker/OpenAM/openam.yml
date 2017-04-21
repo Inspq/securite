@@ -1,0 +1,56 @@
+---
+- hosts: idm
+  vars:
+    app: openam
+  roles:
+    - docker-engine
+    - apache-httpd
+      
+  tasks:
+    - name: Docker repository logon
+      shell: docker login -u {{ docker_registry_username }} -p  {{ docker_registry_password }} -e {{ docker_registry_email }} {{ docker_registry }}
+      when: docker_registry_username is defined and docker_registry_password is defined and docker_registry_email is defined
+  
+    - name: Suppression du conteneur pour sx5javaui 
+      docker_container:
+        name: "{{ container_name }}"
+        image: "{{ docker_image }}:{{ docker_image_version }}"
+        state: absent
+      
+    - name: Mettre a jour l'image Docker
+      docker_image: 
+        name: "{{ sx5javaui_docker_image }}"
+        tag: "{{ sx5javaui_image_version }}"
+        pull: true
+        state: present
+        force: yes
+        
+    - name: Conteneur OpenAM
+      docker_container:
+        name: "{{ container_name }}"
+        image: "{{ docker_image }}:{{ docker_image_version }}"
+        state: started
+        restart_policy: unless-stopped
+        ports:
+        - "{{ openam_port_host }}:{{ openam_port_container }}"
+        - "{{ openam_ajp_port_host }}:{{ openam_ajp_port_container }}"
+        - "{{ opends_admin_port_host }}:{{ opends_admin_port_container }}"
+        - "{{ opends_jmx_port_host }}:{{ opends_jmx_port_container }}"
+        - "{{ opends_ldap_port_host }}:{{ opends_ldap_port_container }}"
+        volumes:
+        - "{{ openam_basedir_host }}:{{ openam_basedir_container }}"
+        
+    - name: Creation du hote virtuel dans APACHE
+      template:
+        src: openam-gabarit-apache.conf
+        dest: /etc/httpd/conf.d/{{ openam_base_url }}.conf
+        force: yes
+      when: openam_base_url is defined
+      notify:
+        - restart httpd  
+      
+  handlers:
+  - name: restart httpd 
+    service: name=httpd state=restarted
+
+             
