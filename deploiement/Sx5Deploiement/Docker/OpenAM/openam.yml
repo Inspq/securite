@@ -28,6 +28,9 @@
     - name: Creer le repertoire pour le volume des donnees de OpenAM
       file:
         path: "{{ openam_basedir_host }}"
+        owner: root
+        group: root
+        mode: "u=rwx,g=rwx,o=rwx"
         state: directory
              
     - name: Conteneur OpenAM
