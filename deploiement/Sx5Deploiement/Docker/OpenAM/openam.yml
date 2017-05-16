@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 - hosts: idm
   vars:
@@ -27,6 +28,39 @@
         
     - name: Conteneur OpenAM
       docker_container:
+=======
+- name: Creation du Conteneur
+  hosts: idm
+  vars:
+    mod_jk_version: 1.2.42
+    app: openam
+  tasks:
+    - name: Installation des packages pre-requis
+      yum: 
+        name: "{{ item }}"
+        state: present
+      with_items:
+       - docker-engine
+       - python-pip
+       - httpd-devel
+       - libtool
+       - apr 
+       - apr-devel
+       - apr-util
+       - apr-util-devel
+    
+    - name: Demarrage de Docker
+      service: name=docker state=started
+        
+    - name: Docker-PY
+      pip:
+        name: "{{ item }}"
+      with_items:
+      - docker-py==1.5.0
+      
+    - name: Conteneur OpenAM
+      docker:
+>>>>>>> branch 'master' of https://github.com/Inspq/securite
         name: "{{ container_name }}"
         image: "{{ docker_image }}:{{ docker_image_version }}"
         state: started
