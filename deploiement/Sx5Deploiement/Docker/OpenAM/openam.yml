@@ -46,7 +46,7 @@
         - "{{ opends_jmx_port_host }}:{{ opends_jmx_port_container }}"
         - "{{ opends_ldap_port_host }}:{{ opends_ldap_port_container }}"
         volumes:
-        - "{{ openam_basedir_host }}:{{ openam_basedir_container }}"
+        - "{{ openam_basedir_host }}:{{ openam_basedir_container }}:Z"
         
     - name: Creation du hote virtuel dans APACHE
       template:
