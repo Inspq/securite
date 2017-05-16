@@ -3,8 +3,8 @@
   vars:
     app: openam
   roles:
-    - docker-engine
-    - apache-httpd
+  - docker-engine
+  - apache-httpd
       
   tasks:
     - name: Docker repository logon
