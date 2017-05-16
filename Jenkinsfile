@@ -1,6 +1,7 @@
 import hudson.model.*
 
 node ('master'){
+	// Construire Sx5-dotnet-REST
     stage('Construire Sx5-dotnet-REST') {
     	build job:'Sx5-construire-dotnet-REST'
     }
