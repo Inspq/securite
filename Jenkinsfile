@@ -1,7 +1,6 @@
 import hudson.model.*
 
 node ('master'){
-	def resultat = 'non'
     stage('Construire Sx5-dotnet-REST') {
     	build job:'Sx5-construire-dotnet-REST'
     }
