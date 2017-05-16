@@ -2,7 +2,7 @@
 - hosts: app
   vars:
     docker_registry: nexus3.inspq.qc.ca:5000
-    sx5dotnetui_internal_port: 5000
+    sx5dotnetui_internal_port: 80
     sx5dotnetui_docker_image: "{{ docker_registry }}/inspq/sx5dotnetui"
     
   roles:
