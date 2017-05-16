@@ -11,7 +11,7 @@
       shell: docker login -u {{ docker_registry_username }} -p  {{ docker_registry_password }} -e {{ docker_registry_email }} {{ docker_registry }}
       when: docker_registry_username is defined and docker_registry_password is defined and docker_registry_email is defined
   
-    - name: Suppression du conteneur pour sx5javaui 
+    - name: Suppression du conteneur pour OpenAM 
       docker_container:
         name: "{{ container_name }}"
         image: "{{ docker_image }}:{{ docker_image_version }}"
@@ -19,8 +19,8 @@
       
     - name: Mettre a jour l'image Docker
       docker_image: 
-        name: "{{ sx5javaui_docker_image }}"
-        tag: "{{ sx5javaui_image_version }}"
+        name: "{{ docker_image }}"
+        tag: "{{ docker_image_version }}"
         pull: true
         state: present
         force: yes
