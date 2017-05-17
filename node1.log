@@ -1,0 +1,116 @@
+15:48:19.296 INFO - Selenium build info: version: '3.4.0', revision: 'unknown'
+15:48:19.299 INFO - Launching a Selenium Grid node
+2017-05-16 15:48:20.183:INFO::main: Logging initialized @1536ms to org.seleniumhq.jetty9.util.log.StdErrLog
+15:48:20.254 INFO - Driver provider org.openqa.selenium.ie.InternetExplorerDriver registration is skipped:
+ registration capabilities Capabilities [{ensureCleanSession=true, browserName=internet explorer, version=, platform=WINDOWS}] does not match the current platform LINUX
+15:48:20.256 INFO - Driver provider org.openqa.selenium.edge.EdgeDriver registration is skipped:
+ registration capabilities Capabilities [{browserName=MicrosoftEdge, version=, platform=WINDOWS}] does not match the current platform LINUX
+15:48:20.256 INFO - Driver class not found: com.opera.core.systems.OperaDriver
+15:48:20.257 INFO - Driver provider com.opera.core.systems.OperaDriver registration is skipped:
+Unable to create new instances on this machine.
+15:48:20.258 INFO - Driver class not found: com.opera.core.systems.OperaDriver
+15:48:20.258 INFO - Driver provider com.opera.core.systems.OperaDriver is not registered
+15:48:20.259 INFO - Driver provider org.openqa.selenium.safari.SafariDriver registration is skipped:
+ registration capabilities Capabilities [{browserName=safari, version=, platform=MAC}] does not match the current platform LINUX
+2017-05-16 15:48:20.317:INFO:osjs.Server:main: jetty-9.4.3.v20170317
+2017-05-16 15:48:20.379:INFO:osjsh.ContextHandler:main: Started o.s.j.s.ServletContextHandler@156695f{/,null,AVAILABLE}
+2017-05-16 15:48:20.395:INFO:osjs.AbstractConnector:main: Started ServerConnector@7db1f{HTTP/1.1,[http/1.1]}{0.0.0.0:5550}
+2017-05-16 15:48:20.397:INFO:osjs.Server:main: Started @1751ms
+15:48:20.398 INFO - Selenium Grid node is up and ready to register to the hub
+15:48:20.421 INFO - Starting auto registration thread. Will try to register every 5000 ms.
+15:48:20.421 INFO - Registering the node to the hub: http://localhost:4440/grid/register
+15:48:20.588 INFO - The node is registered to the hub and ready to use
+15:48:25.900 INFO - SessionCleaner initialized with insideBrowserTimeout 0 and clientGoneTimeout 300000000 polling every 30000000
+15:53:00.850 INFO - Executing: [new session: Capabilities [{acceptInsecureCerts=true, browserName=firefox, javascriptEnabled=true, version=, platform=ANY}]])
+15:53:00.863 INFO - Creating a new session for Capabilities [{acceptInsecureCerts=true, browserName=firefox, javascriptEnabled=true, version=, platform=ANY}]
+1494964380956	geckodriver	INFO	Listening on 127.0.0.1:15295
+1494964381064	geckodriver::marionette	INFO	Starting browser /usr/lib/firefox/firefox with args ["-marionette"]
+1494964383007	Marionette	INFO	Listening on port 41434
+1494964383111	Marionette	WARN	TLS certificate errors will be ignored for this session
+15:53:03.473 INFO - Detected dialect: W3C
+15:53:03.495 INFO - Done: [new session: Capabilities [{acceptInsecureCerts=true, browserName=firefox, javascriptEnabled=true, version=, platform=ANY}]]
+15:53:03.661 INFO - Executing: [page load wait: 500000])
+15:53:03.672 INFO - Done: [page load wait: 500000]
+15:53:03.686 INFO - Executing: [implicit wait: 20000])
+15:53:03.692 INFO - Done: [implicit wait: 20000]
+15:53:03.707 INFO - Executing: [get: http://helloweb.acc.inspq-6111])
+15:53:06.761 INFO - Done: [get: http://helloweb.acc.inspq-6111]
+15:53:06.791 INFO - Executing: [find element: By.xpath: (//input[@type='text'])[1]])
+15:53:06.815 INFO - Done: [find element: By.xpath: (//input[@type='text'])[1]]
+15:53:06.842 INFO - Executing: [clear: 0 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[1]]])
+15:53:06.901 INFO - Done: [clear: 0 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[1]]]
+15:53:06.912 INFO - Executing: [find element: By.xpath: (//input[@type='text'])[1]])
+15:53:06.921 INFO - Done: [find element: By.xpath: (//input[@type='text'])[1]]
+15:53:06.950 INFO - Executing: [send keys: 0 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[1]], [Test1]])
+15:53:06.988 INFO - Done: [send keys: 0 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[1]], [Test1]]
+15:53:07.017 INFO - Executing: [find element: By.xpath: (//input[@type='text'])[2]])
+15:53:07.033 INFO - Done: [find element: By.xpath: (//input[@type='text'])[2]]
+15:53:07.052 INFO - Executing: [clear: 1 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[2]]])
+15:53:07.104 INFO - Done: [clear: 1 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[2]]]
+15:53:07.122 INFO - Executing: [find element: By.xpath: (//input[@type='text'])[2]])
+15:53:07.136 INFO - Done: [find element: By.xpath: (//input[@type='text'])[2]]
+15:53:07.150 INFO - Executing: [send keys: 1 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[2]], [Test1]])
+15:53:07.269 INFO - Done: [send keys: 1 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[2]], [Test1]]
+15:53:07.287 INFO - Executing: [find element: By.className: ng-binding])
+15:53:07.298 INFO - Done: [find element: By.className: ng-binding]
+15:53:07.308 INFO - Executing: [get text: 2 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> class name: ng-binding]])
+15:53:07.338 INFO - Done: [get text: 2 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> class name: ng-binding]]
+15:53:07.359 INFO - Executing: [find element: By.cssSelector: button[type="submit"]])
+15:53:07.369 INFO - Done: [find element: By.cssSelector: button[type="submit"]]
+15:53:07.381 INFO - Executing: [click: 3 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> css selector: button[type="submit"]]])
+15:53:07.423 INFO - Done: [click: 3 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> css selector: button[type="submit"]]]
+15:53:07.440 INFO - Executing: [get: http://helloweb.acc.inspq-6111])
+15:53:07.592 INFO - Done: [get: http://helloweb.acc.inspq-6111]
+15:53:07.607 INFO - Executing: [find element: By.xpath: (//input[@type='text'])[1]])
+15:53:07.619 INFO - Done: [find element: By.xpath: (//input[@type='text'])[1]]
+15:53:07.635 INFO - Executing: [clear: 4 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[1]]])
+15:53:07.673 INFO - Done: [clear: 4 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[1]]]
+15:53:07.706 INFO - Executing: [find element: By.xpath: (//input[@type='text'])[1]])
+15:53:07.715 INFO - Done: [find element: By.xpath: (//input[@type='text'])[1]]
+15:53:07.733 INFO - Executing: [send keys: 4 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[1]], [Test2]])
+15:53:07.773 INFO - Done: [send keys: 4 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[1]], [Test2]]
+15:53:07.785 INFO - Executing: [find element: By.xpath: (//input[@type='text'])[2]])
+15:53:07.795 INFO - Done: [find element: By.xpath: (//input[@type='text'])[2]]
+15:53:07.822 INFO - Executing: [clear: 5 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[2]]])
+15:53:07.857 INFO - Done: [clear: 5 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[2]]]
+15:53:07.886 INFO - Executing: [find element: By.xpath: (//input[@type='text'])[2]])
+15:53:07.894 INFO - Done: [find element: By.xpath: (//input[@type='text'])[2]]
+15:53:07.906 INFO - Executing: [send keys: 5 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[2]], [Test2]])
+15:53:07.956 INFO - Done: [send keys: 5 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[2]], [Test2]]
+15:53:07.982 INFO - Executing: [find element: By.className: ng-binding])
+15:53:07.992 INFO - Done: [find element: By.className: ng-binding]
+15:53:08.015 INFO - Executing: [get text: 6 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> class name: ng-binding]])
+15:53:08.026 INFO - Done: [get text: 6 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> class name: ng-binding]]
+15:53:08.036 INFO - Executing: [find element: By.cssSelector: button[type="submit"]])
+15:53:08.043 INFO - Done: [find element: By.cssSelector: button[type="submit"]]
+15:53:08.056 INFO - Executing: [click: 7 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> css selector: button[type="submit"]]])
+15:53:08.079 INFO - Done: [click: 7 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> css selector: button[type="submit"]]]
+15:53:08.090 INFO - Executing: [get: http://helloweb.acc.inspq-6111])
+15:53:08.240 INFO - Done: [get: http://helloweb.acc.inspq-6111]
+15:53:08.253 INFO - Executing: [find element: By.xpath: (//input[@type='text'])[1]])
+15:53:08.261 INFO - Done: [find element: By.xpath: (//input[@type='text'])[1]]
+15:53:08.275 INFO - Executing: [clear: 8 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[1]]])
+15:53:08.332 INFO - Done: [clear: 8 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[1]]]
+15:53:08.341 INFO - Executing: [find element: By.xpath: (//input[@type='text'])[1]])
+15:53:08.349 INFO - Done: [find element: By.xpath: (//input[@type='text'])[1]]
+15:53:08.359 INFO - Executing: [send keys: 8 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[1]], [Test3]])
+15:53:08.386 INFO - Done: [send keys: 8 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[1]], [Test3]]
+15:53:08.395 INFO - Executing: [find element: By.xpath: (//input[@type='text'])[2]])
+15:53:08.401 INFO - Done: [find element: By.xpath: (//input[@type='text'])[2]]
+15:53:08.411 INFO - Executing: [clear: 9 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[2]]])
+15:53:08.435 INFO - Done: [clear: 9 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[2]]]
+15:53:08.446 INFO - Executing: [find element: By.xpath: (//input[@type='text'])[2]])
+15:53:08.456 INFO - Done: [find element: By.xpath: (//input[@type='text'])[2]]
+15:53:08.466 INFO - Executing: [send keys: 9 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[2]], [Test3]])
+15:53:08.499 INFO - Done: [send keys: 9 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> xpath: (//input[@type='text'])[2]], [Test3]]
+15:53:08.508 INFO - Executing: [find element: By.className: ng-binding])
+15:53:08.515 INFO - Done: [find element: By.className: ng-binding]
+15:53:08.533 INFO - Executing: [get text: 10 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> class name: ng-binding]])
+15:53:08.547 INFO - Done: [get text: 10 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> class name: ng-binding]]
+15:53:08.559 INFO - Executing: [find element: By.cssSelector: button[type="submit"]])
+15:53:08.566 INFO - Done: [find element: By.cssSelector: button[type="submit"]]
+15:53:08.575 INFO - Executing: [click: 11 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> css selector: button[type="submit"]]])
+15:53:08.601 INFO - Done: [click: 11 [[FirefoxDriver: firefox on ANY (0a3fb14c-cce0-43b2-a103-b02dde63a467)] -> css selector: button[type="submit"]]]
+15:53:08.614 INFO - Executing: [delete session: 51a3c5a9-6513-42f2-9872-76c48d779639])
+1494964388633	Marionette	INFO	New connections will no longer be accepted
+15:53:08.834 INFO - Done: [delete session: 51a3c5a9-6513-42f2-9872-76c48d779639]

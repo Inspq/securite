@@ -2,7 +2,7 @@
 - hosts: app
   vars:
     docker_registry: nexus3.inspq.qc.ca:5000
-    sx5dotnetrest_internal_port: 80
+    sx5dotnetrest_internal_port: "{{ sx5dotnetrest_external_port }}"
     sx5dotnetrest_docker_image: "{{ docker_registry }}/inspq/sx5dotnetrest"
     
   roles:
