@@ -38,7 +38,7 @@ public class Sx5JavaUi extends UI{
 	private TextField textNom;
 	private OptionGroup options;
 	private TextArea resultat;
-	@Autowired
+	//@Autowired
 	private Cookie[] cookies;
 	
 	@Override
