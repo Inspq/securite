@@ -51,7 +51,7 @@
     register: security_firewall
      
   - name: Ouvrir le port {{ sx5javaui_external_port }}
-    firewalld: port="{{ sx5javaui_external_port }}/TCP" state=enabled immediate=true permanent=true
+    firewalld: port="{{ sx5javaui_external_port }}/tcp" state=enabled immediate=true permanent=true
     when: ansible_distribution_major_version == "7" and ansible_os_family == "RedHat" and security_firewall is defined and security_firewall.rc == 0
           
   - name: Creation du hote virtuel dans APACHE
