@@ -41,6 +41,7 @@
         "OPENAM_URL": "{{openam_url}}"
         "AGENT_URL": "{{sx5javarest_agent_url}}"
         "AGENT_PROFILE_NAME": "{{sx5javarest_agent_profile_name}}"
+        "CATALINA_OPTS": "-Djava.security.egd=file:/dev/./urandom"
 
   - name: Verifier si le firewall est actif
     command: systemctl status firewalld
