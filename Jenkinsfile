@@ -14,7 +14,7 @@ node ('master'){
     stage('Construire Sx5-java-UI') {
     	build job:'Sx5-construire-java-UI'
     }
-   	stage('Deployer Sx5-dotnet-REST en B2'){
+   	stage('Deployer Sx5-dotnet-REST en ' + params.env){
 		try{
 			build job:'Sx5-deployer-dotnet-REST', parameters: [
 				[$class: 'StringParameterValue', name: 'env.deploiement', value: params.env]
@@ -29,7 +29,7 @@ node ('master'){
 			}
 		}
     }
-   	stage('Deployer Sx5-dotnet-UI en B2'){
+   	stage('Deployer Sx5-dotnet-UI en ' + params.env){
 		try{
 			build job:'Sx5-deployer-dotnet-UI', parameters: [
 				[$class: 'StringParameterValue', name: 'env.deploiement', value: params.env]
@@ -44,7 +44,7 @@ node ('master'){
 			}
 		}
     }
-   	stage('Deployer Sx5-java-REST en B2'){
+   	stage('Deployer Sx5-java-REST en ' + params.env){
 		try{
 			build job:'Sx5-deployer-java-REST', parameters: [
 				[$class: 'StringParameterValue', name: 'env.deploiement', value: params.env]
@@ -59,7 +59,7 @@ node ('master'){
 			}
 		}
     }
-   	stage('Deployer Sx5-java-UI en B2'){
+   	stage('Deployer Sx5-java-UI en ' + params.env){
 		try{
 			build job:'Sx5-deployer-java-UI', parameters: [
 				[$class: 'StringParameterValue', name: 'env.deploiement', value: params.env]
