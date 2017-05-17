@@ -41,6 +41,15 @@
         "OPENAM_URL": "{{openam_url}}"
         "AGENT_URL": "{{sx5javarest_agent_url}}"
         "AGENT_PROFILE_NAME": "{{sx5javarest_agent_profile_name}}"
+
+  - name: Verifier si le firewall est actif
+    command: systemctl status firewalld
+    ignore_errors: yes
+    register: security_firewall
+     
+  - name: Ouvrir le port {{ sx5javarest_external_port }}
+    firewalld: port="{{ sx5javarest_external_port }}/TCP" state=enabled immediate=true permanent=true
+    when: ansible_distribution_major_version == "7" and ansible_os_family == "RedHat" and security_firewall is defined and security_firewall.rc == 0
       
   - name: Creation du hote virtuel dans APACHE
     template:
