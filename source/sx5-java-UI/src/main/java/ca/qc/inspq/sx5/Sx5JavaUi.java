@@ -35,6 +35,7 @@ public class Sx5JavaUi extends UI{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private TextField textIdentification;
 	private TextField textNom;
 	private OptionGroup options;
 	private TextArea resultat;
@@ -43,10 +44,19 @@ public class Sx5JavaUi extends UI{
 	
 	@Override
 	protected void init(VaadinRequest request) {
+		String mail = "";
+		String nomCompet = "";
+		String userid = "";
 		Enumeration<String> headers = VaadinService.getCurrentRequest().getHeaderNames();
 		while (headers.hasMoreElements()){ 
 			String header = headers.nextElement();
 			System.out.println("header: " + header + ": " + VaadinService.getCurrentRequest().getHeader(header));
+			if (header.equals("mail"))
+				mail = VaadinService.getCurrentRequest().getHeader(header);
+			else if (header.equals("nomcomplet"))
+				nomCompet = VaadinService.getCurrentRequest().getHeader(header);
+			else if (header.equals("iv-user"))
+				userid = VaadinService.getCurrentRequest().getHeader(header);
 		}
         VerticalLayout content = new VerticalLayout();
         //content.setSizeFull(); // Use entire window
@@ -54,6 +64,9 @@ public class Sx5JavaUi extends UI{
 
         // Add some component
         content.addComponent(new Label("Test de la sécurité sur des services web en Java",ContentMode.PREFORMATTED));
+        content.addComponent(new Label("Bonjour " + nomCompet ,ContentMode.PREFORMATTED));
+        content.addComponent(new Label("courriel: " + mail ,ContentMode.PREFORMATTED));
+        content.addComponent(new Label("userid: " + userid ,ContentMode.PREFORMATTED));
         textNom = new TextField("Nom");
         content.addComponent(textNom);
         options = new OptionGroup();
