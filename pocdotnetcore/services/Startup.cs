@@ -47,18 +47,56 @@ namespace services
                 ExpireTimeSpan = TimeSpan.FromMinutes(60)
             });
 
+            //app.UseJwtBearerAuthentication(new JwtBearerOptions()
+            //{
+            //    AutomaticChallenge = true,
+            //    AutomaticAuthenticate = true,
+            //    Authority = "https://accounts.google.com",
+            //    TokenValidationParameters = new TokenValidationParameters()
+            //    {
+            //        ValidateIssuerSigningKey = true,
+            //        ValidateIssuer = true,
+            //        ValidIssuer = "https://accounts.google.com",
+            //        ValidateAudience = true,
+            //        ValidAudience = "518663208756-do0306qmhi6k721v92m9bfaaknsain8s.apps.googleusercontent.com",
+            //        ValidateLifetime = true
+            //    },
+            //    Events = new JwtBearerEvents()
+            //    {
+            //        OnTokenValidated = context =>
+            //        {
+            //            String jwtTokenString = context.SecurityToken.ToString();
+            //            var identity = context.Ticket.Principal.Identity as ClaimsIdentity;
+            //            if (identity != null)
+            //            {
+            //                if (!context.Ticket.Principal.HasClaim(c => c.Type == ClaimTypes.Name) &&
+            //                    identity.HasClaim(c => c.Type == "name"))
+            //                {
+            //                    identity.AddClaim(new Claim(ClaimTypes.Name, identity.FindFirst("name").Value));
+            //                }
+            //            }
+
+            //            CookieOptions options = new CookieOptions();
+            //            options.Expires = DateTime.Now.AddDays(1);
+            //            context.Response.Cookies.Append("iPlanetDirectoryPro", jwtTokenString, options);
+            //            return Task.FromResult(0);
+            //        }
+            //    }
+            //});
+
             app.UseJwtBearerAuthentication(new JwtBearerOptions()
             {
                 AutomaticChallenge = true,
                 AutomaticAuthenticate = true,
-                Authority = "https://accounts.google.com",
+                Authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/",
+                RequireHttpsMetadata = false,
                 TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = true,
-                    ValidIssuer = "https://accounts.google.com",
+                    ValidIssuer = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/",
                     ValidateAudience = true,
-                    ValidAudience = "518663208756-do0306qmhi6k721v92m9bfaaknsain8s.apps.googleusercontent.com",
+                    ValidAudience = "sx5dotnetuioidc",
                     ValidateLifetime = true
                 },
                 Events = new JwtBearerEvents()
@@ -90,11 +128,12 @@ namespace services
                 AutomaticAuthenticate = true,
                 //AutomaticChallenge = true,
                 SignInScheme = "Cookies",
-                Authority = "https://accounts.google.com",
+                Authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/",
+                RequireHttpsMetadata = false,
                 ResponseType = "id_token",
-                ClientId = "518663208756-do0306qmhi6k721v92m9bfaaknsain8s.apps.googleusercontent.com",
-                ClientSecret = "U1igWAy15RKhnkJHMN5J_Y_3",
-                CallbackPath = new PathString("/signin-google"),
+                ClientId = "sx5dotnetuioidc",
+                ClientSecret = "Pan0rama",
+                CallbackPath = new PathString("/login"),
                 GetClaimsFromUserInfoEndpoint = true,
 
                 Events = new OpenIdConnectEvents()
@@ -109,6 +148,32 @@ namespace services
                     }
                 }
             });
+
+            //app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions()
+            //{
+            //    AuthenticationScheme = "oidc",
+            //    AutomaticAuthenticate = true,
+            //    //AutomaticChallenge = true,
+            //    SignInScheme = "Cookies",
+            //    Authority = "https://accounts.google.com",
+            //    ResponseType = "id_token",
+            //    ClientId = "518663208756-do0306qmhi6k721v92m9bfaaknsain8s.apps.googleusercontent.com",
+            //    ClientSecret = "U1igWAy15RKhnkJHMN5J_Y_3",
+            //    CallbackPath = new PathString("/signin-google"),
+            //    GetClaimsFromUserInfoEndpoint = true,
+
+            //    Events = new OpenIdConnectEvents()
+            //    {
+            //        OnRemoteFailure = context =>
+            //        {
+            //            return OnRemoteFailure(context);
+            //        },
+            //        OnTicketReceived = context =>
+            //        {
+            //            return OnTicketReceived(context);
+            //        }
+            //    }
+            //});
 
             app.UseMvc(routes =>
             {

@@ -44,45 +44,20 @@ namespace scratch
                 ExpireTimeSpan = TimeSpan.FromMinutes(60)
             });
 
-            //app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions()
-            //{
-            //    AuthenticationScheme = "oidc",
-            //    AutomaticAuthenticate = true,
-            //    AutomaticChallenge = true,
-            //    SignInScheme = "Cookies",
-            //    RequireHttpsMetadata = false,
-            //    Authority = "http://inspq-6111.inspq.qc.ca:8893/openam/oauth2/",
-            //    ResponseType = "id_token",
-            //    ClientId = "sx5dotnetuioidc",
-            //    ClientSecret = "password",
-            //    GetClaimsFromUserInfoEndpoint = true,
-            //    CallbackPath = new PathString("/login"),
-
-            //    Events = new OpenIdConnectEvents()
-            //    {
-            //        OnRemoteFailure = context =>
-            //        {
-            //            return OnRemoteFailure(context);
-            //        },
-            //        OnTicketReceived = context =>
-            //        {
-            //            return OnTicketReceived(context);
-            //        }
-            //    }
-            //});
-
             app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions()
             {
                 AuthenticationScheme = "oidc",
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
                 SignInScheme = "Cookies",
-                Authority = "https://accounts.google.com",
+                RequireHttpsMetadata = false,
+                //Authority = "http://inspq-6111.inspq.qc.ca:8893/openam/oauth2/",
+                Authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/",
                 ResponseType = "id_token",
-                ClientId = "518663208756-do0306qmhi6k721v92m9bfaaknsain8s.apps.googleusercontent.com",
-                ClientSecret = "U1igWAy15RKhnkJHMN5J_Y_3",
-                CallbackPath = new PathString("/signin-google"),
+                ClientId = "sx5dotnetuioidc",
+                ClientSecret = "Pan0rama",
                 GetClaimsFromUserInfoEndpoint = true,
+                CallbackPath = new PathString("/login"),
 
                 Events = new OpenIdConnectEvents()
                 {
@@ -96,6 +71,32 @@ namespace scratch
                     }
                 }
             });
+
+            //app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions()
+            //{
+            //    AuthenticationScheme = "oidc",
+            //    AutomaticAuthenticate = true,
+            //    AutomaticChallenge = true,
+            //    SignInScheme = "Cookies",
+            //    Authority = "https://accounts.google.com",
+            //    ResponseType = "id_token",
+            //    ClientId = "518663208756-do0306qmhi6k721v92m9bfaaknsain8s.apps.googleusercontent.com",
+            //    ClientSecret = "U1igWAy15RKhnkJHMN5J_Y_3",
+            //    CallbackPath = new PathString("/signin-google"),
+            //    GetClaimsFromUserInfoEndpoint = true,
+
+            //    Events = new OpenIdConnectEvents()
+            //    {
+            //        OnRemoteFailure = context =>
+            //        {
+            //            return OnRemoteFailure(context);
+            //        },
+            //        OnTicketReceived = context =>
+            //        {
+            //            return OnTicketReceived(context);
+            //        }
+            //    }
+            //});
 
 
             //app.UseGoogleAuthentication(new GoogleOptions()
