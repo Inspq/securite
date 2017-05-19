@@ -1,0 +1,68 @@
+---
+- hosts: app
+  vars:
+    docker_registry: nexus3.inspq.qc.ca:5000
+    sx5dotnetuioidc_internal_port: 5000
+    sx5dotnetuioidc_docker_image: "{{ docker_registry }}/inspq/sx5dotnetuioidc"
+    
+  roles:
+  - docker-engine
+      
+  tasks:
+
+  - name: Docker repository logon
+    shell: docker login -u {{ docker_registry_username }} -p  {{ docker_registry_password }} -e {{ docker_registry_email }} {{ docker_registry }}
+    when: docker_registry_username is defined and docker_registry_password is defined and docker_registry_email is defined
+
+  - name: Suppression du conteneur pour sx5dotnetuioidc 
+    docker:
+      name: "{{ sx5dotnetuioidc_container_name }}"
+      image: "{{ sx5dotnetuioidc_docker_image }}:{{ sx5dotnetuioidc_image_version }}"
+      state: absent
+    
+  - name: Mettre a jour l'image Docker
+    docker_image: 
+      name: "{{ sx5dotnetuioidc_docker_image }}"
+      tag: "{{ sx5dotnetuioidc_image_version }}"
+      pull: true
+      state: present
+      force: yes
+      
+  - name: Creation du conteneur pour sx5dotnetuioidc 
+    docker_container:
+      name: "{{ sx5dotnetuioidc_container_name }}"
+      image: "{{ sx5dotnetuioidc_docker_image }}:{{ sx5dotnetuioidc_image_version }}"
+      state: started
+      restart_policy: unless-stopped
+      ports:
+      - "{{ sx5dotnetuioidc_external_port }}:{{ sx5dotnetuioidc_internal_port }}"
+      env:
+        "JAVA_REST_BASE_URL": "http://{{ sx5javarest_base_url }}:{{ sx5javarest_external_port }}"
+        "JAVA_RESTOIDC_BASE_URL": "http://{{ sx5javarestoidc_base_url }}:{{ sx5javarestoidc_external_port }}"
+        "DOTNET_REST_BASE_URL": "http://{{ sx5dotnetrest_base_url }}:{{ sx5dotnetrest_external_port }}"
+        "DOTNET_RESTOIDC_BASE_URL": "http://{{ sx5dotnetrestoidc_base_url }}:{{ sx5dotnetrestoidc_external_port }}"
+        "OPENAM_URL": "{{openam_url}}"
+        "OIDC_CLIENT_ID": "{{sx5dotnetuioidc_oidc_client_id}}"
+        "OIDC_CLIENT_SECRET": "{{sx5dotnetuioidc_oidc_client_secret}}"
+   
+  - name: Verifier si le firewall est actif
+    command: systemctl status firewalld
+    ignore_errors: yes
+    register: security_firewall
+     
+  - name: Ouvrir le port {{ sx5dotnetuioidc_external_port }}
+    firewalld: port="{{ sx5dotnetuioidc_external_port }}/tcp" state=enabled immediate=true permanent=true
+    when: ansible_distribution_major_version == "7" and ansible_os_family == "RedHat" and security_firewall is defined and security_firewall.rc == 0
+
+  - name: Creation du hote virtuel dans APACHE
+    template:
+      src: sx5dotnetuioidc-gabarit-apache.conf
+      dest: /etc/httpd/conf.d/{{ sx5dotnetuioidc_base_url }}.conf
+      force: yes
+    when: sx5dotnetuioidc_base_url is defined
+    notify:
+      - restart httpd  
+      
+  handlers:
+  - name: restart httpd 
+    service: name=httpd state=restarted

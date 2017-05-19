@@ -1,4 +1,4 @@
-from nexus3.inspq.qc.ca:5000/inspq/dotnet:1.0.4
+FROM nexus3.inspq.qc.ca:5000/inspq/dotnet:1.0.4
 
 RUN yum install -y wget java7 httpd unzip links
 

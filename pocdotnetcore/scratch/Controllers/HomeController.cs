@@ -37,12 +37,16 @@ namespace scratch.Controllers
             string request = String.Empty;
             if (model.AvecOuSansAgent == "avec")
             {
-                url = "http://sx5dotnetrest.bicycle2.inspq.qc.ca:8890/api/rest/";
+                url = Environment.GetEnvironmentVariable("DOTNET_REST_BASE_URL");
+                if (url == null)
+                    url = "http://sx5dotnetrest.bicycle2.inspq.qc.ca:8890/api/rest/";
                 request = "helloworld/" + model.Username.Replace(" ", "");
             }
             else if (model.AvecOuSansAgent == "sans")
             {
-                url = "http://localhost:5001/API/Home/";
+                url = Environment.GetEnvironmentVariable("DOTNET_RESTOIDC_BASE_URL");
+                if (url == null)
+                    url = "http://localhost:5001/API/Home/";
                 request = "auth";
             }
             string retour = AppelerServiceRESTCSharp(url, request, model.Token).Result;

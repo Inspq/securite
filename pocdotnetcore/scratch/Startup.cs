@@ -28,7 +28,15 @@ namespace scratch
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
-
+            string authority = Environment.GetEnvironmentVariable("OPENAM_URL") + "/openam/oauth2/";
+            if (authority == null)
+                authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/";
+            string clientId = Environment.GetEnvironmentVariable("OIDC_CLIENT_ID");
+            if (clientId == null)
+                clientId = "sx5dotnetuioidc";
+            string clientSecret = Environment.GetEnvironmentVariable("OIDC_CLIENT_SECRET");
+            if (clientSecret == null)
+                clientSecret = "Pan0rama";
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -51,11 +59,10 @@ namespace scratch
                 AutomaticChallenge = true,
                 SignInScheme = "Cookies",
                 RequireHttpsMetadata = false,
-                //Authority = "http://inspq-6111.inspq.qc.ca:8893/openam/oauth2/",
-                Authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/",
+                Authority = authority,
                 ResponseType = "id_token",
-                ClientId = "sx5dotnetuioidc",
-                ClientSecret = "Pan0rama",
+                ClientId = clientId,
+                ClientSecret = clientSecret,
                 GetClaimsFromUserInfoEndpoint = true,
                 CallbackPath = new PathString("/login"),
 
