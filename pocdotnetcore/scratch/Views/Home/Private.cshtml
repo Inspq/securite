@@ -1,15 +1,21 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using scratch.Models.HomeViewModels
+@model PrivateViewModel
+
 <html>
     <head>
         <title>privé</title>
     </head>
     <body>
         <h1>this is private</h1>
-        <h2>@ViewData["username"]</h2>
-        @Html.TextArea("token", ViewData["token"])
+        <form method="post" action="Appeler">
+            <h2>@Html.TextBoxFor(m => m.Username)</h2>
+            @Html.TextAreaFor(m => m.Token)
+            <dl>
+                <dt>@Html.RadioButtonFor(m => m.AvecOuSansAgent, "sans", true) Sans agent</dt>
+                <dt>@Html.RadioButtonFor(m => m.AvecOuSansAgent, "avec", false) Avec Agent</dt>
+            </dl>
+            <button type="submit">Appeler le service</button>
+        </form>
+        @Html.TextAreaFor(m => m.Retour)
     </body>
 </html>

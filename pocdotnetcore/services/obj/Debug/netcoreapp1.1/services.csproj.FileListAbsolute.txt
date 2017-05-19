@@ -1,9 +1,0 @@
-C:\Users\Mathieu\Documents\Visual Studio 2017\Projects\sx5ui\services\bin\Debug\netcoreapp1.1\services.deps.json
-C:\Users\Mathieu\Documents\Visual Studio 2017\Projects\sx5ui\services\bin\Debug\netcoreapp1.1\services.runtimeconfig.json
-C:\Users\Mathieu\Documents\Visual Studio 2017\Projects\sx5ui\services\bin\Debug\netcoreapp1.1\services.runtimeconfig.dev.json
-C:\Users\Mathieu\Documents\Visual Studio 2017\Projects\sx5ui\services\bin\Debug\netcoreapp1.1\services.dll
-C:\Users\Mathieu\Documents\Visual Studio 2017\Projects\sx5ui\services\obj\Debug\netcoreapp1.1\services.AssemblyInfo.cs
-C:\Users\Mathieu\Documents\Visual Studio 2017\Projects\sx5ui\services\obj\Debug\netcoreapp1.1\services.csprojResolveAssemblyReference.cache
-C:\Users\Mathieu\Documents\Visual Studio 2017\Projects\sx5ui\services\bin\Debug\netcoreapp1.1\services.pdb
-C:\Users\Mathieu\Documents\Visual Studio 2017\Projects\sx5ui\services\obj\Debug\netcoreapp1.1\services.dll
-C:\Users\Mathieu\Documents\Visual Studio 2017\Projects\sx5ui\services\obj\Debug\netcoreapp1.1\services.pdb
