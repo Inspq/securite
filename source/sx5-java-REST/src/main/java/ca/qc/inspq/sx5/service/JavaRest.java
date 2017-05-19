@@ -7,16 +7,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping(value = "/java/rest",
+import ca.qc.inspq.securite.commun.Hello;
+
+@RequestMapping(path = "/java/rest",
 				method=RequestMethod.GET,
 				produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RestController
 public class JavaRest {
-    @RequestMapping(value = "/hello", method = RequestMethod.GET, produces="application/json")
+    @RequestMapping(path = "/hello", method = RequestMethod.GET, produces="application/json")
     //public String hello(@RequestParam(value="nom",defaultValue="World") String nom) {
     public @ResponseBody Hello hello(@RequestParam(value="nom",defaultValue="World") String nom) {
-    	Hello hello = new Hello();
-    	hello.setHello(nom);
+    	Hello hello = new Hello(nom);
     	return hello;
         //return String.format("Hello %s!", nom);
     }

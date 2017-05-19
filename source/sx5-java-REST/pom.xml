@@ -47,6 +47,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>ca.qc.inspq.sx5</groupId>
+      <artifactId>sx5-java-commun</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>

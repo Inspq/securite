@@ -5,7 +5,7 @@
 
 	<groupId>ca.qc.inspq.sx5</groupId>
 	<artifactId>sx5-java-UI</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>sx5-java-UI</name>
 	<description>Demo project for Spring Boot</description>
@@ -25,6 +25,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>ca.qc.inspq.sx5</groupId>
+			<artifactId>sx5-java-commun</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+        <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
 		</dependency>

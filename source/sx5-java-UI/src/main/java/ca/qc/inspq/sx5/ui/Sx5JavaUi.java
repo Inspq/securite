@@ -1,17 +1,16 @@
-package ca.qc.inspq.sx5;
-
+package ca.qc.inspq.sx5.ui;
 
 import java.util.Enumeration;
 
 import javax.servlet.http.Cookie;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
+
+import ca.qc.inspq.securite.commun.Hello;
 
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
@@ -19,7 +18,6 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.TextArea;
@@ -29,18 +27,12 @@ import com.vaadin.ui.VerticalLayout;
 
 @SpringUI
 public class Sx5JavaUi extends UI{
-	
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private TextField textIdentification;
+
 	private TextField textNom;
 	private OptionGroup options;
 	private TextArea resultat;
-	//@Autowired
-	private Cookie[] cookies;
 	
 	@Override
 	protected void init(VaadinRequest request) {
@@ -77,9 +69,6 @@ public class Sx5JavaUi extends UI{
         Button button = new Button("Shoot l'appel au service man!");
 
         button.addClickListener(new Button.ClickListener() {
-            /**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			public void buttonClick(ClickEvent event) {
@@ -100,11 +89,11 @@ public class Sx5JavaUi extends UI{
 		// Lire les variables d'environnement contenant les adresses des services backend.
 		String javaBaseUrl = System.getenv("JAVA_REST_BASE_URL");
 		if (javaBaseUrl == null){
-			javaBaseUrl = "http://qlapp00b.bicycle2.inspq.qc.ca";
+			javaBaseUrl = "http://sx5javarest.bicycle2.inspq.qc.ca:8888";
 		}
 		String dotnetBaseUrl = System.getenv("DOTNET_REST_BASE_URL");
 		if (dotnetBaseUrl == null){
-			dotnetBaseUrl = "http://qlapp00b.bicycle2.inspq.qc.ca";
+			dotnetBaseUrl = "http://sx5dotnetrest.bicycle2.inspq.qc.ca:8890";
 		}
 		String url = "";
 		if (options.getValue().equals("C# REST") || options.getValue().equals("Java REST")){
@@ -113,7 +102,7 @@ public class Sx5JavaUi extends UI{
 			else if (options.getValue().equals("Java REST"))
 				url = javaBaseUrl + "/sx5-java-REST/java/rest/hello?nom=" + textNom.getValue();
 			System.out.println("URL: " + url);
-	        cookies = VaadinService.getCurrentRequest().getCookies();
+			Cookie[] cookies = VaadinService.getCurrentRequest().getCookies();
 	        String cookiesString = "";
 			// Lire les cookies de la session
 	        for (Cookie cookie : cookies) {
