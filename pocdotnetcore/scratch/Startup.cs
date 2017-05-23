@@ -28,15 +28,25 @@ namespace scratch
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
-            string authority = Environment.GetEnvironmentVariable("OPENAM_URL") + "/openam/oauth2/";
-            if (authority == null)
-                authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/";
+
+            string authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/";
+            if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("OPENAM_URL")))
+            {
+                authority = Environment.GetEnvironmentVariable("OPENAM_URL") + "/openam/oauth2/";
+            }
+
             string clientId = Environment.GetEnvironmentVariable("OIDC_CLIENT_ID");
-            if (clientId == null)
-                clientId = "sx5dotnetuioidc";
+            if (String.IsNullOrEmpty(clientId))
+            {
+                clientId = "sx5dotnetuioidcmathieu";
+            }
+
             string clientSecret = Environment.GetEnvironmentVariable("OIDC_CLIENT_SECRET");
-            if (clientSecret == null)
+            if (String.IsNullOrEmpty(clientSecret))
+            {
                 clientSecret = "Pan0rama";
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
