@@ -66,7 +66,7 @@ namespace scratch.Controllers
                 // Ajouter le header Cookie contenant l'ensemble des cookies de la session actuelle dans le client Http.
                 //client.DefaultRequestHeaders.Add("Cookie", cookiesString);
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-                client.DefaultRequestHeaders.Add("Cookie",HttpContext.Request.Cookies["iPlanetDirectoryPro"]);
+                client.DefaultRequestHeaders.Add("Cookie","iPlanetDirectoryPro " + HttpContext.Request.Cookies["iPlanetDirectoryPro"]);
 
                 // Appeler le service
                 HttpResponseMessage response = await client.GetAsync(request);
