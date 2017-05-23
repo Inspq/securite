@@ -31,6 +31,15 @@ namespace services
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
+            string authority = Environment.GetEnvironmentVariable("OPENAM_URL") + "/openam/oauth2/";
+            if (authority == null)
+                authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/";
+            string clientId = Environment.GetEnvironmentVariable("OIDC_CLIENT_ID");
+            if (clientId == null)
+                clientId = "sx5dotnetuioidc";
+            string clientSecret = Environment.GetEnvironmentVariable("OIDC_CLIENT_SECRET");
+            if (clientSecret == null)
+                clientSecret = "Pan0rama";
 
             if (env.IsDevelopment())
             {
@@ -88,13 +97,13 @@ namespace services
             {
                 AutomaticChallenge = true,
                 AutomaticAuthenticate = true,
-                Authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/",
+                Authority = authority,
                 RequireHttpsMetadata = false,
                 TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = true,
-                    ValidIssuer = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/",
+                    ValidIssuer = authority,
                     ValidateAudience = true,
                     ValidAudience = "sx5dotnetuioidc",
                     ValidateLifetime = true
@@ -128,11 +137,11 @@ namespace services
                 AutomaticAuthenticate = true,
                 //AutomaticChallenge = true,
                 SignInScheme = "Cookies",
-                Authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/",
+                Authority = authority,
                 RequireHttpsMetadata = false,
                 ResponseType = "id_token",
-                ClientId = "sx5dotnetuioidc",
-                ClientSecret = "Pan0rama",
+                ClientId = clientId,
+                ClientSecret = clientSecret,
                 CallbackPath = new PathString("/login"),
                 GetClaimsFromUserInfoEndpoint = true,
 
