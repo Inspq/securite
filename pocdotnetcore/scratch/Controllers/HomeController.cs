@@ -26,7 +26,7 @@ namespace scratch.Controllers
             //ViewData["token"] = HttpContext.Request.Cookies["iPlanetDirectoryPro"];
             PrivateViewModel model = new PrivateViewModel();
             model.Username = User.Identity.Name;
-            model.Token = HttpContext.Request.Cookies["iPlanetDirectoryPro"];
+            model.Token = HttpContext.Request.Cookies["ca.qc.inspq.oidc.token"];
             return View("Private", model);
         }
 

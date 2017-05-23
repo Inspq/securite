@@ -177,7 +177,7 @@ namespace scratch
                 //     Console.WriteLine( cookie.Key + ": " + cookie.Value);
                 //}
 
-                //context.Response.Cookies.Append("iPlanetDirectoryPro", iPlanetProCookie, options);
+                context.Response.Cookies.Append("ca.qc.inspq.oidc.token", jwtTokenString, options);
             }
             return Task.FromResult(0);
         }
