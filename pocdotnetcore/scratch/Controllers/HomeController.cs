@@ -26,7 +26,7 @@ namespace scratch.Controllers
             //ViewData["token"] = HttpContext.Request.Cookies["iPlanetDirectoryPro"];
             PrivateViewModel model = new PrivateViewModel();
             model.Username = User.Identity.Name;
-            model.Token = HttpContext.Request.Cookies["iPlanetDirectoryPro"];
+            model.Token = HttpContext.Request.Cookies["ca.qc.inspq.oidc.token"];
             return View("Private", model);
         }
 
@@ -66,6 +66,7 @@ namespace scratch.Controllers
                 // Ajouter le header Cookie contenant l'ensemble des cookies de la session actuelle dans le client Http.
                 //client.DefaultRequestHeaders.Add("Cookie", cookiesString);
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+                client.DefaultRequestHeaders.Add("Cookie","iPlanetDirectoryPro=" + HttpContext.Request.Cookies["iPlanetDirectoryPro"]);
 
                 // Appeler le service
                 HttpResponseMessage response = await client.GetAsync(request);

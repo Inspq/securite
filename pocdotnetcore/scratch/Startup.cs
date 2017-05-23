@@ -28,15 +28,25 @@ namespace scratch
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
-            string authority = Environment.GetEnvironmentVariable("OPENAM_URL") + "/oauth2/";
-            if (authority == null)
-                authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/";
+
+            string authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/";
+            if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("OPENAM_URL")))
+            {
+                authority = Environment.GetEnvironmentVariable("OPENAM_URL") + "/oauth2/";
+            }
+
             string clientId = Environment.GetEnvironmentVariable("OIDC_CLIENT_ID");
-            if (clientId == null)
-                clientId = "sx5dotnetuioidc";
+            if (String.IsNullOrEmpty(clientId))
+            {
+                clientId = "sx5dotnetuioidcmathieu";
+            }
+
             string clientSecret = Environment.GetEnvironmentVariable("OIDC_CLIENT_SECRET");
-            if (clientSecret == null)
+            if (String.IsNullOrEmpty(clientSecret))
+            {
                 clientSecret = "Pan0rama";
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -139,6 +149,7 @@ namespace scratch
 
         private Task OnTicketReceived(TicketReceivedContext context)
         {
+            string iPlanetProCookie = string.Empty;
             if (context.Request.HasFormContentType)
             {
                 String jwtTokenString = context.Request.Form["id_token"];
@@ -159,7 +170,14 @@ namespace scratch
 
                 CookieOptions options = new CookieOptions();
                 options.Expires = DateTime.Now.AddDays(1);
-                context.Response.Cookies.Append("iPlanetDirectoryPro", jwtTokenString, options);
+                // Lire les cookies de la session et les stocker dans une chaine de caractere.
+                //foreach (var cookie in context.HttpContext.Request.Cookies) {
+                //    if (cookie.Key.Equals("iPlanetDirectoryPro"))
+                //        iPlanetProCookie = cookie.Value;
+                //     Console.WriteLine( cookie.Key + ": " + cookie.Value);
+                //}
+
+                context.Response.Cookies.Append("ca.qc.inspq.oidc.token", jwtTokenString, options);
             }
             return Task.FromResult(0);
         }
