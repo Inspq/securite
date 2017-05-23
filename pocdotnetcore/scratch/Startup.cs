@@ -171,13 +171,13 @@ namespace scratch
                 CookieOptions options = new CookieOptions();
                 options.Expires = DateTime.Now.AddDays(1);
                 // Lire les cookies de la session et les stocker dans une chaine de caractere.
-                foreach (var cookie in context.HttpContext.Request.Cookies) {
-                    if (cookie.Key.Equals("iPlanetDirectoryPro"))
-                        iPlanetProCookie = cookie.Value;
-                     Console.WriteLine( cookie.Key + ": " + cookie.Value);
-                }
+                //foreach (var cookie in context.HttpContext.Request.Cookies) {
+                //    if (cookie.Key.Equals("iPlanetDirectoryPro"))
+                //        iPlanetProCookie = cookie.Value;
+                //     Console.WriteLine( cookie.Key + ": " + cookie.Value);
+                //}
 
-                context.Response.Cookies.Append("iPlanetDirectoryPro", iPlanetProCookie, options);
+                //context.Response.Cookies.Append("iPlanetDirectoryPro", iPlanetProCookie, options);
             }
             return Task.FromResult(0);
         }
