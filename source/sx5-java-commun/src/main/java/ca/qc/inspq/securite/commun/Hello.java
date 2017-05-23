@@ -2,9 +2,6 @@ package ca.qc.inspq.securite.commun;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement
 public class Hello implements Serializable {
 	private static final long serialVersionUID = -2487030245799063868L;
 
@@ -22,5 +19,10 @@ public class Hello implements Serializable {
 
 	public String getHello() {
 		return hello;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("{\"hello\":%s}", hello);
 	}
 }
