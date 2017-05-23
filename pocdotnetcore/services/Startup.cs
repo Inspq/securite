@@ -31,7 +31,7 @@ namespace services
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
-            string authority = Environment.GetEnvironmentVariable("OPENAM_URL") + "/openam/oauth2/";
+            string authority = Environment.GetEnvironmentVariable("OPENAM_URL") + "/oauth2/";
             if (authority == null)
                 authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/";
             string clientId = Environment.GetEnvironmentVariable("OIDC_CLIENT_ID");
