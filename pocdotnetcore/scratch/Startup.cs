@@ -149,6 +149,7 @@ namespace scratch
 
         private Task OnTicketReceived(TicketReceivedContext context)
         {
+            string iPlanetProCookie = string.Empty;
             if (context.Request.HasFormContentType)
             {
                 String jwtTokenString = context.Request.Form["id_token"];
@@ -169,7 +170,14 @@ namespace scratch
 
                 CookieOptions options = new CookieOptions();
                 options.Expires = DateTime.Now.AddDays(1);
-                context.Response.Cookies.Append("iPlanetDirectoryPro", jwtTokenString, options);
+                // Lire les cookies de la session et les stocker dans une chaine de caractere.
+                foreach (var cookie in context.HttpContext.Request.Cookies) {
+                    if (cookie.Key.Equals("iPlanetDirectoryPro"))
+                        iPlanetProCookie = cookie.Value;
+                     Console.WriteLine( cookie.Key + ": " + cookie.Value);
+                }
+
+                context.Response.Cookies.Append("iPlanetDirectoryPro", iPlanetProCookie, options);
             }
             return Task.FromResult(0);
         }
