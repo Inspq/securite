@@ -34,7 +34,7 @@ namespace services
             string authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/";
             if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("OPENAM_URL")))
             {
-                authority = Environment.GetEnvironmentVariable("OPENAM_URL") + "/openam/oauth2/";
+                authority = Environment.GetEnvironmentVariable("OPENAM_URL") + "/oauth2/";
             }
 
             string clientId = Environment.GetEnvironmentVariable("OIDC_CLIENT_ID");
