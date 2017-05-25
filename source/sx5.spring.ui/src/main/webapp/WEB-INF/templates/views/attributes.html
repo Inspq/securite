@@ -19,28 +19,35 @@
     <body>
         <nav th:replace="fragments/assets :: menu"></nav>
         <div class="container container-fluid">
-	        <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
-	        <form name="attributeForm" th:action="@{http://inspq-6149:8088/java/rest/session/attribute}" method="post" class="form-horizontal">
-                <div class="form-group">
-                    <label for="attributeName" class="col-md-2 control-label">Attribute name</label>
-                    <div class="col-md-10">
+            <h1 th:if="${#authorization.expression('isAuthenticated()')}" th:inline="text">Hello [[${#authentication.principal.userId}]]</h1>
+            <form role="form" id="attributeForm" name="attributeForm" th:action="@{/attribute}" method="post" class="form-horizontal">
+                <div class="form-group row">
+                    <label for="attributeName" class="col-sm-2 col-form-label">Attribute name</label>
+                    <div class="col-sm-10">
                         <input type="text" class="form-control" id="attributeName" name="attributeName" />
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="attributeValue" class="col-md-2 control-label">Attribute value</label>
-                    <div class="col-md-10">
+                <div class="form-group row">
+                    <label for="attributeValue" class="col-sm-2 col-form-label">Attribute value</label>
+                    <div class="col-sm-10">
                         <input type="text" class="form-control" id="attributeValue" name="attributeValue" />
                     </div>
                 </div>
                 <input type="submit" value="Add attribute"/>
-	        </form>
-	        <ul>
-	            <li th:each="entry : ${@session.getAttributes().entrySet()}">
-	                <div th:text="${entry.getKey() + ' : ' + entry.getValue()}">Attribute key : Attribute value</div>
-	            </li>
-	        </ul>
-	    </div>
+            </form>
+            <div th:if="${#authorization.expression('!isAuthenticated()')}">
+                <h1>Hello guest.</h1>Please <a href="/login" th:href="@{/login}">sign in</a>.
+            </div>
+            <div class="console">
+                <code>
+                    <ul class="list-unstyled">
+                        <li th:each="entry : ${@session.getAttributes().entrySet()}">
+                            <div th:text="${entry.getKey() + ' : ' + entry.getValue()}">Attribute key : Attribute value</div>
+                        </li>
+                    </ul>
+                </code>
+            </div>
+        </div>
         <th:block th:replace="fragments/assets :: scripts">
             <script src="http://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
             <script src="../../static/js/bootstrap.min.js"></script>

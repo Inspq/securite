@@ -1,6 +1,7 @@
 package ca.qc.inspq.securite.controller;
 
-import javax.annotation.PostConstruct;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +19,7 @@ import ca.qc.inspq.securite.session.Session;
 @Controller
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public class HelloController {
-	private static final String ATTRIBUT_HELLO_RESULT = "HelloResult";
+	private static final DateFormat df = new SimpleDateFormat("hh:mm:ss");
 
 	@Value("${sx5.java.base.url}")
 	private String urlJava;
@@ -31,13 +32,6 @@ public class HelloController {
 
 	@Autowired
 	private Session session;
-
-	@PostConstruct
-	private void init() {
-		if (session.getAttribute(ATTRIBUT_HELLO_RESULT) == null) {
-			session.setAttribute(ATTRIBUT_HELLO_RESULT, "");
-		}
-	}
 
 	@RequestMapping(path = "/hello",
 			method = RequestMethod.GET)
@@ -54,8 +48,7 @@ public class HelloController {
 			result = e.getMessage();
 			e.printStackTrace();
 		} finally {
-			session.setAttribute(ATTRIBUT_HELLO_RESULT,
-					String.format("%s[Call]: %s [Result]: %s\n", session.getAttribute(ATTRIBUT_HELLO_RESULT), helloUrl, result));
+			session.setAttribute(String.format("[%s] %s", df.format(System.currentTimeMillis()), helloUrl), result);
 			
 		}
 		return "views/home";

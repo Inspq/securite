@@ -19,39 +19,39 @@
     <body>
         <nav th:replace="fragments/assets :: menu"></nav>
         <div class="container container-fluid">
-            <p th:if="${#authorization.expression('isAuthenticated()')}">
-	           <h1 th:inline="text">Hello [[${#authentication.principal.userId}]]</h1>
-	           <p>
-	               <form role="form" id="form_id" class="form-horizontal" th:action="@{/hello}" method="get">
-		               <div class="form-group row">
-                           <label for="serveur" class="col-sm-2 col-form-label">Serveur</label>
-                           <div class="col-sm-10">
-	                           <select id="serveur" name="serveur" class="custom-select mb-2 mr-sm-2 mb-sm-0">
-	                               <option value="java"> Java</option>
-	                               <option value="dotNet"> .NET</option>
-	                           </select>
-                           </div>
-                       </div>
-                       <div class="form-group row">
-                           <label for="nom" class="col-sm-2 col-form-label">Nom</label>
-                           <div class="col-sm-10">
-                               <input type="text" class="form-control" id="nom" name="nom" />
-                           </div>
-		               </div>
-		               <input type="submit" value="Send"/>
-	               </form>
-	           </p>
-	        </p>
-            <p th:if="${#authorization.expression('!isAuthenticated()')}">
-               <h1>Hello guest.</h1>Please <a href="/login" th:href="@{/login}">sign in</a>.
-            </p>
-            <ul>
-                <li th:each="entry : ${@session.getAttributes().entrySet()}">
-                    <div th:text="${entry.getKey() + ' : ' + entry.getValue()}">Attribute key : Attribute value</div>
-                </li>
-            </ul>
-	    </div>
-	    <th:block th:replace="fragments/assets :: scripts">
+            <h1 th:if="${#authorization.expression('isAuthenticated()')}" th:inline="text">Hello [[${#authentication.principal.userId}]]</h1>
+            <form role="form" id="formHello" name="formHello" class="form-horizontal" th:action="@{/hello}" method="get">
+                <div class="form-group row">
+                    <label for="serveur" class="col-sm-2 col-form-label">Serveur</label>
+                    <div class="col-sm-10">
+                        <select id="serveur" name="serveur" class="custom-select form-control">
+                            <option value="java"> Java</option>
+                            <option value="dotNet"> .NET</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="nom" class="col-sm-2 col-form-label">Nom</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="nom" name="nom" />
+                    </div>
+                </div>
+                <input type="submit" value="Send"/>
+            </form>
+            <div th:if="${#authorization.expression('!isAuthenticated()')}">
+                <h1>Hello guest.</h1>Please <a href="/login" th:href="@{/login}">sign in</a>.
+            </div>
+            <div class="console">
+	            <code>
+	                <ul class="list-unstyled">
+	                    <li th:each="entry : ${@session.getAttributes().entrySet()}">
+	                        <div th:text="${entry.getKey() + ' : ' + entry.getValue()}">Attribute key : Attribute value</div>
+	                    </li>
+	                </ul>
+	            </code>
+            </div>
+        </div>
+        <th:block th:replace="fragments/assets :: scripts">
             <script src="http://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
             <script src="../../static/js/bootstrap.min.js"></script>
         </th:block>
