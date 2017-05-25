@@ -21,7 +21,10 @@ public class HelloController {
 	private static final String ATTRIBUT_HELLO_RESULT = "HelloResult";
 
 	@Value("${sx5.java.base.url}")
-	private String url;
+	private String urlJava;
+
+	@Value("${sx5.dotnet.base.url}")
+	private String urlDotNet;
 
 	@Autowired
 	private OAuth2RestTemplate restTemplate;
@@ -38,8 +41,10 @@ public class HelloController {
 
 	@RequestMapping(path = "/hello",
 			method = RequestMethod.GET)
-	public String hello(@RequestParam("nom") String nom) throws Exception {
-		String helloUrl = String.format("%s%s", url, nom);
+	public String hello(@RequestParam("serveur") String serveur, @RequestParam("nom") String nom) throws Exception {
+		String helloUrl = String.format("%s%s", 
+				"java".equalsIgnoreCase(serveur) ? urlJava : urlDotNet,
+				nom);
 		
 		String result = "";
 		try {
