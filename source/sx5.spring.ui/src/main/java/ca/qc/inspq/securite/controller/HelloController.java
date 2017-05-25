@@ -38,8 +38,8 @@ public class HelloController {
 
 	@RequestMapping(path = "/hello",
 			method = RequestMethod.GET)
-	public String hello(@RequestParam("name") String name) throws Exception {
-		String helloUrl = String.format("%s/%s", url, name);
+	public String hello(@RequestParam("nom") String nom) throws Exception {
+		String helloUrl = String.format("%s/hello?nom=%s", url, nom);
 		
 		String result = "";
 		try {
@@ -50,7 +50,7 @@ public class HelloController {
 			e.printStackTrace();
 		} finally {
 			session.setAttribute(ATTRIBUT_HELLO_RESULT,
-					String.format("%sCall: [%s]<br />%s<br />", session.getAttribute(ATTRIBUT_HELLO_RESULT), helloUrl, result));
+					String.format("%s[Call]: %s [Result]: %s\n", session.getAttribute(ATTRIBUT_HELLO_RESULT), helloUrl, result));
 			
 		}
 		return "views/home";

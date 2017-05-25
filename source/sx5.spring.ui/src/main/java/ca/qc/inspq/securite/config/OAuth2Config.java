@@ -11,6 +11,8 @@ import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResour
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 
+import ca.qc.inspq.securite.jwt.OAuth2JwtRequestAuthenticator;
+
 @Configuration
 @EnableOAuth2Client
 public class OAuth2Config {
@@ -43,9 +45,9 @@ public class OAuth2Config {
     }
 
     @Bean
-    public OAuth2RestTemplate openIdTemplate(final OAuth2ClientContext clientContext) {
+    public OAuth2RestTemplate oAuth2RestTemplate(final OAuth2ClientContext clientContext) {
         final OAuth2RestTemplate template = new OAuth2RestTemplate(oauth(), clientContext);
+        template.setAuthenticator(new OAuth2JwtRequestAuthenticator());
         return template;
     }
-
 }

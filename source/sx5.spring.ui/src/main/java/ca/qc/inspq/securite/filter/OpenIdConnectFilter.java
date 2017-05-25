@@ -51,7 +51,7 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
             final Map<String, String> authInfo = new ObjectMapper().readValue(tokenDecoded.getClaims(), Map.class);
 
             final OpenIdConnectUserDetails user = new OpenIdConnectUserDetails(authInfo, accessToken);
-            return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            return new UsernamePasswordAuthenticationToken(user, idToken, user.getAuthorities());
         } catch (final InvalidTokenException e) {
             throw new BadCredentialsException("Could not obtain user details from token", e);
         }
@@ -63,11 +63,9 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
     }
 
     private static class NoopAuthenticationManager implements AuthenticationManager {
-
         @Override
         public Authentication authenticate(Authentication authentication) throws AuthenticationException {
             throw new UnsupportedOperationException("No authentication should be done with this AuthenticationManager");
         }
-
     }
 }
