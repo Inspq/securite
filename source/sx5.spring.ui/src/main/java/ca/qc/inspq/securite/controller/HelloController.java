@@ -39,7 +39,7 @@ public class HelloController {
 	@RequestMapping(path = "/hello",
 			method = RequestMethod.GET)
 	public String hello(@RequestParam("nom") String nom) throws Exception {
-		String helloUrl = String.format("%s/hello?nom=%s", url, nom);
+		String helloUrl = String.format("%s%s", url, nom);
 		
 		String result = "";
 		try {
