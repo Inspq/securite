@@ -6,7 +6,7 @@
 	<groupId>ca.qc.inspq</groupId>
 	<artifactId>securite.ui</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>securite ui</name>
 	<description>Securite UI POC</description>
@@ -22,13 +22,14 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<sx5-java-commun.version>0.1.2</sx5-java-commun.version>
 	</properties>
 
 	<dependencies>
         <dependency>
             <groupId>ca.qc.inspq.sx5</groupId>
             <artifactId>sx5-java-commun</artifactId>
-            <version>0.1.0-SNAPSHOT</version>
+            <version>${sx5-java-commun.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
