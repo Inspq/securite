@@ -44,7 +44,8 @@
         "OPENAM_URL": "{{openam_url}}"
         "OIDC_CLIENT_ID": "{{sx5javauioidc_oidc_client_id}}"
         "OIDC_CLIENT_SECRET": "{{sx5javauioidc_oidc_client_secret}}"
-        "CATALINA_OPTS": "-Djava.security.egd=file:/dev/./urandom -DOPENAM_URL={{openam_url}} -DOIDC_CLIENT_ID={{sx5javauioidc_oidc_client_id}} -DOIDC_CLIENT_SECRET={{sx5javauioidc_oidc_client_secret}}"
+        "OIDC_REDIRECT_URI": "{{sx5javauioidc_oidc_redirect_uri}}"
+        "CATALINA_OPTS": "-Djava.security.egd=file:/dev/./urandom -DOPENAM_URL={{openam_url}} -DOIDC_CLIENT_ID={{sx5javauioidc_oidc_client_id}} -DOIDC_CLIENT_SECRET={{sx5javauioidc_oidc_client_secret}} -DOIDC_REDIRECT_URI={{sx5javauioidc_oidc_redirect_uri}}"
 
   - name: Verifier si le firewall est actif
     command: systemctl status firewalld
