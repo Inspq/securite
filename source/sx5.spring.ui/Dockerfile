@@ -5,7 +5,16 @@ ENV CATALINA_OPTS "-server -XX:MaxPermSize=256m -Xmx1024m"
 ENV PATH $CATALINA_HOME/bin:$PATH
 
 ARG APP_VERSION=0.0.1-SNAPSHOT
-ADD target/securite.ui-${APP_VERSION}.war $CATALINA_HOME/webapps/securite.ui.war
+ADD target/securite.ui-${APP_VERSION}.war $CATALINA_HOME/webapps/ROOT.war
+
+RUN rm -rf $CATALINA_HOME/webapps/ROOT
+RUN rm -rf $CATALINA_HOME/webapps/docs
+RUN rm -rf $CATALINA_HOME/webapps/examples
+RUN rm -rf $CATALINA_HOME/webapps/host-manager
+RUN rm -rf $CATALINA_HOME/webapps/manager
+RUN mkdir $CATALINA_HOME/webapps/ROOT 
+RUN cd $CATALINA_HOME/webapps/ROOT && jar -xvf ../ROOT.war
+
 
 EXPOSE 8080 8009
 WORKDIR $CATALINA_HOME
