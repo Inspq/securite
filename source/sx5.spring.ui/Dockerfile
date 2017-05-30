@@ -1,4 +1,4 @@
-FROM elfelip/tomcat:8.5.14
+FROM elfelip/tomcat:8.5.15
 
 ENV CATALINA_HOME /opt/tomcat
 ENV CATALINA_OPTS "-server -XX:MaxPermSize=256m -Xmx1024m"
