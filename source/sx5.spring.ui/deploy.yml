@@ -16,14 +16,14 @@
 
   - name: Suppression du conteneur pour sx5javauioidc 
     docker:
-      name: "{{ sx5javauioidcoidc_container_name }}"
-      image: "{{ sx5javauioidcoidc_docker_image }}:{{ sx5javauioidcoidc_image_version }}"
+      name: "{{ sx5javauioidc_container_name }}"
+      image: "{{ sx5javauioidc_docker_image }}:{{ sx5javauioidc_image_version }}"
       state: absent
     
   - name: Mettre a jour l'image Docker
     docker_image: 
-      name: "{{ sx5javauioidcoidc_docker_image }}"
-      tag: "{{ sx5javauioidcoidc_image_version }}"
+      name: "{{ sx5javauioidc_docker_image }}"
+      tag: "{{ sx5javauioidc_image_version }}"
       pull: true
       state: present
       force: yes
