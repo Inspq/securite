@@ -20,6 +20,12 @@ node ('master'){
     stage('Construire Sx5-java-UI') {
     	build job:'Sx5-construire-java-UI'
     }
+    stage('Construire Sx5-java-REST-OIDC') {
+    	build job:'Sx5-construire-java-REST-OIDC'
+    }
+    stage('Construire Sx5-java-UI-OIDC') {
+    	build job:'Sx5-construire-java-UI-OIDC'
+    }
    	stage('Deployer Sx5-dotnet-REST en ' + params.env){
 		try{
 			build job:'Sx5-deployer-dotnet-REST', parameters: [
@@ -110,5 +116,34 @@ node ('master'){
 			}
 		}
     }
-
+   	stage('Deployer Sx5-java-REST-OIDC en ' + params.env){
+		try{
+			build job:'Sx5-deployer-java-REST-OIDC', parameters: [
+				[$class: 'StringParameterValue', name: 'env.deploiement', value: params.env]
+			]
+		} catch(error) {
+			echo "Erreur"
+			retry(2) {
+				input "Re Essayer?"
+				build job:'Sx5-deployer-java-REST-OIDC', parameters: [
+					[$class: 'StringParameterValue', name: 'env.deploiement', value: params.env]
+				]
+			}
+		}
+    }
+   	stage('Deployer Sx5-java-UI-OIDC en ' + params.env){
+		try{
+			build job:'Sx5-deployer-java-UI-OIDC', parameters: [
+				[$class: 'StringParameterValue', name: 'env.deploiement', value: params.env]
+			]
+		} catch(error) {
+			echo "Erreur"
+			retry(2) {
+				input "Re Essayer?"
+				build job:'Sx5-deployer-java-UI-OIDC', parameters: [
+					[$class: 'StringParameterValue', name: 'env.deploiement', value: params.env]
+				]
+			}
+		}
+    }
 }
