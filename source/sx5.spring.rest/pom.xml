@@ -6,7 +6,7 @@
 	<groupId>ca.qc.inspq</groupId>
 	<artifactId>securite.rest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>securite rest</name>
 	<description>Securite REST service POC</description>
