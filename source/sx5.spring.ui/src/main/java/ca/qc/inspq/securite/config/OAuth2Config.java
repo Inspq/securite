@@ -45,7 +45,7 @@ public class OAuth2Config {
         System.out.println("clientSecret: " + clientSecret);
         System.out.println("accessTokenUri: " + accessTokenUri);
         System.out.println("userAuthorizationUri: " + userAuthorizationUri);
-        System.out.println("redirectUri" + redirectUri);
+        System.out.println("redirectUri: " + redirectUri);
         return details;
     }
 
