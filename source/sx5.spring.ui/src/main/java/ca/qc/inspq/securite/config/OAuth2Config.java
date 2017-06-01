@@ -41,6 +41,11 @@ public class OAuth2Config {
         details.setScope(Arrays.asList("openid", "email", "profile"));
         details.setPreEstablishedRedirectUri(redirectUri);
         details.setUseCurrentUri(false);
+        System.out.println("clientId: " + clientId);
+        System.out.println("clientSecret: " + clientSecret);
+        System.out.println("accessTokenUri: " + accessTokenUri);
+        System.out.println("userAuthorizationUri: " + userAuthorizationUri);
+        System.out.println("redirectUri" + redirectUri);
         return details;
     }
 
