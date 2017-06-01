@@ -3,28 +3,92 @@ import hudson.model.*
 node ('master'){
 	// Construire Sx5-dotnet-REST
     stage('Construire Sx5-dotnet-REST') {
-    	build job:'Sx5-construire-dotnet-REST'
+		try{
+	    	build job:'Sx5-construire-dotnet-REST'
+		} catch(error) {
+			echo "Erreur"
+			retry(2) {
+				input "Re Essayer?"
+		    	build job:'Sx5-construire-dotnet-REST'
+			}
+		}
     }
     stage('Construire Sx5-dotnet-REST-OIDC') {
-    	build job:'Sx5-construire-dotnet-REST-OIDC'
+		try{
+    		build job:'Sx5-construire-dotnet-REST-OIDC'
+		} catch(error) {
+			echo "Erreur"
+			retry(2) {
+				input "Re Essayer?"
+		    	build job:'Sx5-construire-dotnet-REST-OIDC'
+			}
+		}
     }
     stage('Construire Sx5-dotnet-UI') {
-    	build job:'Sx5-construire-dotnet-UI'
+		try{
+	    	build job:'Sx5-construire-dotnet-UI'
+		} catch(error) {
+			echo "Erreur"
+			retry(2) {
+				input "Re Essayer?"
+		    	build job:'Sx5-construire-dotnet-UI'
+			}
+		}
     }
     stage('Construire Sx5-dotnet-UI-OIDC') {
-    	build job:'Sx5-construire-dotnet-UI-OIDC'
+		try{
+	    	build job:'Sx5-construire-dotnet-UI-OIDC'
+		} catch(error) {
+			echo "Erreur"
+			retry(2) {
+				input "Re Essayer?"
+		    	build job:'Sx5-construire-dotnet-UI-OIDC'
+			}
+		}
     }
     stage('Construire Sx5-java-REST') {
-    	build job:'Sx5-construire-java-REST'
+		try{
+	    	build job:'Sx5-construire-java-REST'
+		} catch(error) {
+			echo "Erreur"
+			retry(2) {
+				input "Re Essayer?"
+		    	build job:'Sx5-construire-java-REST'
+			}
+		}
     }
     stage('Construire Sx5-java-UI') {
-    	build job:'Sx5-construire-java-UI'
+		try{
+	    	build job:'Sx5-construire-java-UI'
+		} catch(error) {
+			echo "Erreur"
+			retry(2) {
+				input "Re Essayer?"
+		    	build job:'Sx5-construire-java-UI'
+			}
+		}
     }
     stage('Construire Sx5-java-REST-OIDC') {
-    	build job:'Sx5-construire-java-REST-OIDC'
+		try{
+			build job:'Sx5-construire-java-REST-OIDC'
+		} catch(error) {
+			echo "Erreur"
+			retry(2) {
+				input "Re Essayer?"
+				build job:'Sx5-construire-java-REST-OIDC'
+			}
+		}
     }
     stage('Construire Sx5-java-UI-OIDC') {
-    	build job:'Sx5-construire-java-UI-OIDC'
+		try{
+			build job:'Sx5-construire-java-UI-OIDC'
+		} catch(error) {
+			echo "Erreur"
+			retry(2) {
+				input "Re Essayer?"
+				build job:'Sx5-construire-java-UI-OIDC'
+			}
+		}
     }
    	stage('Deployer Sx5-dotnet-REST en ' + params.env){
 		try{
