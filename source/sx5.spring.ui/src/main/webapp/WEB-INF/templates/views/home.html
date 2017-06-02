@@ -36,7 +36,7 @@
                         <input type="text" class="form-control" id="nom" name="nom" />
                     </div>
                 </div>
-                <input type="submit" value="Envoyer requête"/>
+                <input type="submit" value="Envoyer requete"/>
             </form>
             <div th:if="${#authorization.expression('!isAuthenticated()')}">
                 <h1>Hello guest.</h1>Please <a href="/login" th:href="@{/login}">sign in</a>.

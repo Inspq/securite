@@ -43,7 +43,8 @@ public class HelloController {
 		String result = "";
 		try {
 			Hello hello = restTemplate.getForEntity(helloUrl, Hello.class).getBody();
-			result = hello.toString();
+			//result = hello.toString();
+			result = hello.getHello();
 		} catch (Exception e) {
 			result = e.getMessage();
 			e.printStackTrace();
