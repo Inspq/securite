@@ -48,10 +48,12 @@ public class HelloController {
 			method = RequestMethod.GET)
 	public String hello(@RequestParam("serveur") String serveur, @RequestParam("nom") String nom, @RequestParam("type") String type, @RequestHeader("Cookie") String cookies) throws Exception {
 		String helloUrl = "";
-		if (type.equals("agent"))
-			helloUrl = String.format("%s%s", 
-				"java".equalsIgnoreCase(serveur) ? urlJavaAgent : urlDotNetAgent,
-				nom);
+		if (type.equals("agent")){
+			if ("java".equalsIgnoreCase(serveur))
+				helloUrl = String.format("%s/hello?nom=%s", urlJavaAgent,nom);
+			else
+				helloUrl = String.format("%s%s", urlDotNetAgent,nom);
+		}
 		else
 			helloUrl = String.format("%s%s", 
 				"java".equalsIgnoreCase(serveur) ? urlJava : urlDotNet,
