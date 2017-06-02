@@ -37,10 +37,10 @@
       ports:
       - "{{ sx5javauioidc_external_port }}:{{ sx5javauioidc_internal_port }}"
       env:
-        "JAVA_REST_BASE_URL": "http://{{ sx5javarest_base_url }}:{{ sx5javarest_external_port }}/"
-        "JAVA_RESTOIDC_BASE_URL": "http://{{ sx5javarestoidc_base_url }}:{{ sx5javarestoidc_external_port }}/"
-        "DOTNET_REST_BASE_URL": "http://{{ sx5dotnetrest_base_url }}:{{ sx5dotnetrest_external_port }}/"
-        "DOTNET_RESTOIDC_BASE_URL": "http://{{ sx5dotnetrestoidc_base_url }}:{{ sx5dotnetrestoidc_external_port }}/"
+        "JAVA_REST_BASE_URL": "http://{{ sx5javarest_base_url }}:{{ sx5javarest_external_port }}"
+        "JAVA_RESTOIDC_BASE_URL": "http://{{ sx5javarestoidc_base_url }}:{{ sx5javarestoidc_external_port }}"
+        "DOTNET_REST_BASE_URL": "http://{{ sx5dotnetrest_base_url }}:{{ sx5dotnetrest_external_port }}"
+        "DOTNET_RESTOIDC_BASE_URL": "http://{{ sx5dotnetrestoidc_base_url }}:{{ sx5dotnetrestoidc_external_port }}"
         "OPENAM_URL": "{{openam_url}}"
         "OIDC_CLIENT_ID": "{{sx5javauioidc_oidc_client_id}}"
         "OIDC_CLIENT_SECRET": "{{sx5javauioidc_oidc_client_secret}}"
