@@ -50,12 +50,12 @@ namespace scratch.Controllers
                     url = "http://localhost:5001/API/Home/";
                 request = "auth";
             }
-            string retour = AppelerServiceRESTCSharp(url, request, model.Token).Result;
+            string retour = AppelerServiceRESTCSharp(url, request, model.Token, model.Username).Result;
             model.Retour = retour;
             return View("Private", model);
         }
 
-        private async Task<string> AppelerServiceRESTCSharp(string url, string request, string token)
+        private async Task<string> AppelerServiceRESTCSharp(string url, string request, string token, string username)
         {
             string message = "";
             using (HttpClient client = new HttpClient())
@@ -70,7 +70,7 @@ namespace scratch.Controllers
                 client.DefaultRequestHeaders.Add("Cookie","iPlanetDirectoryPro=" + HttpContext.Request.Cookies["iPlanetDirectoryPro"]);
 
                 // Appeler le service
-                HttpResponseMessage response = await client.GetAsync(request, model.Username);
+                HttpResponseMessage response = await client.GetAsync(String.Format(request, username));
                 if (response.IsSuccessStatusCode)
                 {
                     message = await response.Content.ReadAsStringAsync();

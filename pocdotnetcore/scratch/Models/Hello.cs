@@ -1,4 +1,4 @@
-namespace TestRestService.Models
+namespace scratch.Models
 {
     public class Hello
     {
