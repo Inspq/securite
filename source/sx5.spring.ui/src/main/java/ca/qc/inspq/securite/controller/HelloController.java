@@ -21,10 +21,10 @@ import ca.qc.inspq.securite.session.Session;
 public class HelloController {
 	private static final DateFormat df = new SimpleDateFormat("hh:mm:ss");
 
-	@Value("${sx5.java.base.url}")
+	@Value("${sx5.java.oidc.base.url}")
 	private String urlJava;
 
-	@Value("${sx5.dotnet.base.url}")
+	@Value("${sx5.dotnet.oidc.base.url}")
 	private String urlDotNet;
 
 	@Autowired
