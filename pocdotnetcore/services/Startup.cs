@@ -152,7 +152,7 @@ namespace services
                 ClientSecret = clientSecret,
                 CallbackPath = new PathString("/login"),
                 GetClaimsFromUserInfoEndpoint = true,
-
+                
                 Events = new OpenIdConnectEvents()
                 {
                     OnRemoteFailure = context =>
