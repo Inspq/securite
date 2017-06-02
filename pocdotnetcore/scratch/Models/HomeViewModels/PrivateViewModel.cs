@@ -11,6 +11,7 @@ namespace scratch.Models.HomeViewModels
         public string Token { get; set; }
 
         public string AvecOuSansAgent { get; set; }
+        public string JavaOuDotNet { get; set;}
         public string Retour { get; set; }
     }
 }
