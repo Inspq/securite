@@ -38,7 +38,7 @@
       - "{{ sx5dotnetuioidc_external_port }}:{{ sx5dotnetuioidc_internal_port }}"
       env:
         "JAVA_REST_BASE_URL": "http://{{ sx5javarest_base_url }}:{{ sx5javarest_external_port }}/sx5-java-REST/java/rest/"
-        "JAVA_RESTOIDC_BASE_URL": "http://{{ sx5javarestoidc_base_url }}:{{ sx5javarestoidc_external_port }}/helloworld/"
+        "JAVA_RESTOIDC_BASE_URL": "http://{{ sx5javarestoidc_base_url }}:{{ sx5javarestoidc_external_port }}/"
         "DOTNET_REST_BASE_URL": "http://{{ sx5dotnetrest_base_url }}:{{ sx5dotnetrest_external_port }}/api/rest/"
         "DOTNET_RESTOIDC_BASE_URL": "http://{{ sx5dotnetrestoidc_base_url }}:{{ sx5dotnetrestoidc_external_port }}/api/home/"
         "OPENAM_URL": "{{openam_url}}"
