@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using services.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,7 +19,15 @@ namespace services.Controllers
         {
             return new string[] { "value1", "value2" };
         }
-
+        [HttpGet("helloworld/{nom}")]
+        [Authorize]
+        public Hello HelloWorld(string nom)
+        {
+            Hello hello = new Hello();
+            hello.hello = nom;
+            //return String.Format("Bonjour C# REST {0}", nom);
+            return hello;
+        }
         [HttpGet("auth")]
         [Authorize]
         public IEnumerable<string> GetAuth()

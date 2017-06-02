@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using scratch.Models.HomeViewModels;
 using System.Net.Http;
+using scratch.Models;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -69,7 +70,7 @@ namespace scratch.Controllers
                 client.DefaultRequestHeaders.Add("Cookie","iPlanetDirectoryPro=" + HttpContext.Request.Cookies["iPlanetDirectoryPro"]);
 
                 // Appeler le service
-                HttpResponseMessage response = await client.GetAsync(request);
+                HttpResponseMessage response = await client.GetAsync(request, model.Username);
                 if (response.IsSuccessStatusCode)
                 {
                     message = await response.Content.ReadAsStringAsync();
