@@ -48,8 +48,8 @@
         volumes:
         - "{{ openam_basedir_host }}:{{ openam_basedir_container }}:Z"
         env:
-        "TZ": "America/Toronto"
-        "CATALINA_OPTS": "-Djava.security.egd=file:/dev/./urandom"
+          "TZ": "America/Toronto"
+          "CATALINA_OPTS": "-Djava.security.egd=file:/dev/./urandom"
         
     - name: Creation du hote virtuel dans APACHE
       template:
