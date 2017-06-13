@@ -16,9 +16,9 @@ WORKDIR $INSTALL_DIR
 #ADD openam-distribution/openam-distribution-ssoadmintools/target/SSOAdminTools-$OPENAM_VERSION.zip $INSTALL_DIR
 #ADD openam-distribution/openam-distribution-ssoconfiguratortools/target/SSOConfiguratorTools-$OPENAM_VERSION.zip $INSTALL_DIR
 #ADD openam-server/target/OpenAM-$OPENAM_VERSION.war $CATALINA_HOME/webapps/openam.war
-RUN wget --no-check-certificate -O OpenAM.zip "$OPENAM_DOWNLOAD_URL"
-RUN unzip OpenAM.zip
-RUN cp openam/OpenAM-eval-$OPENAM_VERSION.war $CATALINA_HOME/webapps/openam.war
+RUN wget --no-check-certificate -O $INSTALL_DIR/OpenAM.zip "$OPENAM_DOWNLOAD_URL"
+RUN unzip $INSTALL_DIR/OpenAM.zip -d $INSTALL_DIR
+RUN cp openam/AM-eval-$OPENAM_VERSION.war $CATALINA_HOME/webapps/openam.war
 RUN mkdir -p /opt/openam-tools/admin
 RUN unzip SSOAdminTools-$OPENAM_VERSION -d /opt/openam-tools/admin
 RUN mkdir -p /opt/openam-tools/config
