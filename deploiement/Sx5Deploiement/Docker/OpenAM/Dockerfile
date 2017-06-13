@@ -20,9 +20,9 @@ RUN wget --no-check-certificate -O $INSTALL_DIR/OpenAM.zip "$OPENAM_DOWNLOAD_URL
 RUN unzip $INSTALL_DIR/OpenAM.zip -d $INSTALL_DIR
 RUN cp openam/AM-eval-$OPENAM_VERSION.war $CATALINA_HOME/webapps/openam.war
 RUN mkdir -p /opt/openam-tools/admin
-RUN unzip SSOAdminTools-$OPENAM_VERSION -d /opt/openam-tools/admin
+RUN unzip openam/SSOAdminTools-$OPENAM_VERSION -d /opt/openam-tools/admin
 RUN mkdir -p /opt/openam-tools/config
-RUN unzip SSOConfiguratorTools-$OPENAM_VERSION.zip -d /opt/openam-tools/config
+RUN unzip openam/SSOConfiguratorTools-$OPENAM_VERSION.zip -d /opt/openam-tools/config
 RUN rm -rf $INSTALL_DIR
 RUN sed -i '2i rm -f /root/openam/opends/locks/*' $CATALINA_HOME/bin/catalina.sh
 RUN sed -i '3i /root/openam/opends/bin/start-ds' $CATALINA_HOME/bin/catalina.sh
