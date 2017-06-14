@@ -2,7 +2,7 @@
 FROM elfelip/tomcat:8.5.14
 
 ENV TZ "America/Toronto"
-ENV CATALINA_OPTS "-server -XX:MaxPermSize=256m -Xmx1024m -Djava.security.egd=file:/dev/./urandom"
+ENV CATALINA_OPTS "-server -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -Xmx1024m -Djava.security.egd=file:/dev/./urandom -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true"
 ENV PATH $JAVA_HOME/bin:$CATALINA_HOME/bin:$PATH
 
 RUN yum install -y unzip which wget
