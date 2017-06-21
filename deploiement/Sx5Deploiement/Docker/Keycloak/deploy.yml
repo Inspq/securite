@@ -12,7 +12,6 @@
     keycloak_data_dir: /opt/jboss/keycloak/standalone/data
   roles:
   - docker-engine
-  - apache-httpd
       
   tasks:
     - name: Docker repository logon
