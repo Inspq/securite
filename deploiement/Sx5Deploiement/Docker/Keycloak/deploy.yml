@@ -1,5 +1,4 @@
 ---
----
 - hosts: idm
   vars:
     app: keycloak
