@@ -29,7 +29,8 @@ namespace scratch
         {
             loggerFactory.AddConsole();
 
-            string authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/";
+            //string authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/";
+            string authority = "http://localhost:9090/auth/realms/pocdotnetcore";
             if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("OIDC_AUTHORITY_URL")))
             {
                 authority = Environment.GetEnvironmentVariable("OIDC_AUTHORITY_URL");
@@ -38,13 +39,15 @@ namespace scratch
             string clientId = Environment.GetEnvironmentVariable("OIDC_CLIENT_ID");
             if (String.IsNullOrEmpty(clientId))
             {
-                clientId = "sx5dotnetuioidcmathieu";
+                //clientId = "sx5dotnetuioidcmathieu";
+                clientId = "pocdotnetcore";
             }
 
             string clientSecret = Environment.GetEnvironmentVariable("OIDC_CLIENT_SECRET");
             if (String.IsNullOrEmpty(clientSecret))
             {
-                clientSecret = "Pan0rama";
+                //clientSecret = "Pan0rama";
+                clientSecret = "cee3273d-aade-47e2-b7da-43e1174de388";
             }
 
             if (env.IsDevelopment())
