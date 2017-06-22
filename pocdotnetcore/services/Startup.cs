@@ -32,9 +32,9 @@ namespace services
         {
             loggerFactory.AddConsole();
             string authority = "http://login.bicycle2.inspq.qc.ca:18080/openam/oauth2/";
-            if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("OPENAM_URL")))
+            if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("OIDC_AUTHORITY_URL")))
             {
-                authority = Environment.GetEnvironmentVariable("OPENAM_URL") + "/oauth2/";
+                authority = Environment.GetEnvironmentVariable("OIDC_AUTHORITY_URL");
             }
 
             string clientId = Environment.GetEnvironmentVariable("OIDC_CLIENT_ID");
