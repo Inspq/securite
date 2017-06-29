@@ -14,7 +14,7 @@
     shell: docker login -u {{ docker_registry_username }} -p  {{ docker_registry_password }} -e {{ docker_registry_email }} {{ docker_registry }}
     when: docker_registry_username is defined and docker_registry_password is defined and docker_registry_email is defined
 
-  - name: Suppression du conteneur pour sx5javarestoidc 
+  - name: Suppression du conteneur pour {{ sx5javarestoidc_container_name }} 
     docker:
       name: "{{ sx5javarestoidc_container_name }}"
       image: "{{ sx5javarestoidc_docker_image }}:{{ sx5javarestoidc_image_version }}"
@@ -28,7 +28,7 @@
       state: present
       force: yes
       
-  - name: Creation du conteneur pour sx5javarestoidc 
+  - name: Creation du conteneur pour {{ sx5javarestoidc_container_name }} 
     docker_container:
       name: "{{ sx5javarestoidc_container_name }}"
       image: "{{ sx5javarestoidc_docker_image }}:{{ sx5javarestoidc_image_version }}"
