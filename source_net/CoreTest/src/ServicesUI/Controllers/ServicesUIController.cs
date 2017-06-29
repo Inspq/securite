@@ -18,6 +18,7 @@ namespace ServicesUI.Controllers
     {
         private readonly IOptions<ServicesUiConfig> config;
         private String cookiesString;
+        private String accessToken;
         public ServicesUIController(IOptions<ServicesUiConfig> optionsAccessor)
         {
             this.config = optionsAccessor;
@@ -38,6 +39,8 @@ namespace ServicesUI.Controllers
             Console.WriteLine("cookiesString: " + cookiesString);
             foreach(var header in ControllerContext.HttpContext.Request.Headers){
                 Console.WriteLine("header: " + header.Key + ": " + header.Value);
+                if (header.Key.Equals("OIDC_access_token"))
+                    accessToken = header.Value;
             }
             if (model.Services.Equals("C-R"))
             {
@@ -75,12 +78,20 @@ namespace ServicesUI.Controllers
                 client.DefaultRequestHeaders.Accept.Clear();
                 // Ajouter le header Cookie contenant l'ensemble des cookies de la session actuelle dans le client Http.
                 client.DefaultRequestHeaders.Add("Cookie",cookiesString);
-
+                if (accessToken != null)
+                    client.DefaultRequestHeaders.Add("Authorization","bearer " + accessToken);
+                //foreach(var header in ControllerContext.HttpContext.Request.Headers){
+                    //client.DefaultRequestHeaders.Add(header.Key,(string)header.Value);
+                //}
                 // Appeler le service
-                HttpResponseMessage response = await client.GetAsync(String.Format(config.Value.CRUri, nom));
-                if (response.IsSuccessStatusCode)
-                {
-                    message = await response.Content.ReadAsStringAsync();
+                try {
+                    HttpResponseMessage response = await client.GetAsync(String.Format(config.Value.CRUri, nom));
+                    if (response.IsSuccessStatusCode)
+                    {
+                        message = await response.Content.ReadAsStringAsync();
+                    }
+                } catch (HttpRequestException e) {
+                    Console.WriteLine(e);
                 }
             }
             return message;
@@ -102,6 +113,8 @@ namespace ServicesUI.Controllers
                 client.BaseAddress = new Uri(url);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Add("Cookie", cookiesString);
+                if (accessToken != null)
+                    client.DefaultRequestHeaders.Add("Authorization","bearer " + accessToken);
                 //HttpResponseMessage response = await client.GetAsync(String.Format("sx5-java-REST/java/rest/hello?nom={0}", nom));
                 HttpResponseMessage response = await client.GetAsync(String.Format(config.Value.JRUri, nom));
                 if (response.IsSuccessStatusCode)

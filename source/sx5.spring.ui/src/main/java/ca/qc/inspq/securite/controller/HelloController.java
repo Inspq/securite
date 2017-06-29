@@ -29,6 +29,12 @@ public class HelloController {
 	@Value("${sx5.java.oidc.base.url}")
 	private String urlJava;
 
+	@Value("${sx5.dotnet.oidc.ext.base.url}")
+	private String urlDotNetExt;
+
+	@Value("${sx5.java.oidc.ext.base.url}")
+	private String urlJavaExt;
+
 	@Value("${sx5.dotnet.oidc.base.url}")
 	private String urlDotNet;
 
@@ -46,7 +52,7 @@ public class HelloController {
 	
 	@RequestMapping(path = "/hello",
 			method = RequestMethod.GET)
-	public String hello(@RequestParam("serveur") String serveur, @RequestParam("nom") String nom, @RequestParam("type") String type, @RequestHeader("Cookie") String cookies) throws Exception {
+	public String hello(@RequestParam("serveur") String serveur, @RequestParam("nom") String nom, @RequestParam("dest") String dest, @RequestParam("type") String type, @RequestHeader("Cookie") String cookies) throws Exception {
 		String helloUrl = "";
 		if (type.equals("agent")){
 			if ("java".equalsIgnoreCase(serveur))
@@ -54,11 +60,16 @@ public class HelloController {
 			else
 				helloUrl = String.format("%s%s", urlDotNetAgent,nom);
 		}
-		else
-			helloUrl = String.format("%s%s", 
-				"java".equalsIgnoreCase(serveur) ? urlJava : urlDotNet,
-				nom);
-		
+		else{
+			if (dest.equals("ext"))
+				helloUrl = String.format("%s%s", 
+							"java".equalsIgnoreCase(serveur) ? urlJavaExt : urlDotNetExt,
+							nom);
+			else
+				helloUrl = String.format("%s%s", 
+						"java".equalsIgnoreCase(serveur) ? urlJava : urlDotNet,
+						nom);
+		}
 		String result = "";
 		Hello hello;
 		

@@ -43,11 +43,11 @@ public class Sx5JavaUi extends UI{
 		while (headers.hasMoreElements()){ 
 			String header = headers.nextElement();
 			System.out.println("header: " + header + ": " + VaadinService.getCurrentRequest().getHeader(header));
-			if (header.equals("mail"))
+			if (header.equals("oidc_claim_email"))
 				mail = VaadinService.getCurrentRequest().getHeader(header);
-			else if (header.equals("nomcomplet"))
+			else if (header.equals("oidc_claim_name"))
 				nomCompet = VaadinService.getCurrentRequest().getHeader(header);
-			else if (header.equals("iv-user"))
+			else if (header.equals("oidc_claim_preferred_username"))
 				userid = VaadinService.getCurrentRequest().getHeader(header);
 		}
         VerticalLayout content = new VerticalLayout();

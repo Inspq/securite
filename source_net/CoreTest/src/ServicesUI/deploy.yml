@@ -3,8 +3,6 @@
   vars:
     docker_registry: nexus3.inspq.qc.ca:5000
     sx5dotnetui_internal_port: "{{ sx5dotnetui_external_port }}"
-    sx5dotnetui_docker_image: "{{ docker_registry }}/inspq/sx5dotnetui"
-    
   roles:
   - docker-engine
       
@@ -44,7 +42,14 @@
         "OPENAM_URL": "{{openam_url}}"
         "AGENT_URL": "{{sx5dotnetui_agent_url}}"
         "AGENT_PROFILE_NAME": "{{sx5dotnetui_agent_profile_name}}"
-   
+        "OIDC_CLIENT_ID": "{{sx5javauioidc_oidc_client_id}}"
+        "OIDC_CLIENT_SECRET": "{{sx5javauioidc_oidc_client_secret}}"
+        "OIDC_REDIRECT_URI": "{{sx5javauioidc_oidc_redirect_uri}}"
+        "OIDC_ISSUER": "{{ issuer }}"
+        "$OIDC_AUTHORITY_URL": "openid_configuration_url"
+        "VIRTUAL_HOST_NAME": "{{ inventory_hostname }}"
+        "VIRTUEL_HOST_PORT}}": "{{ sx5dotnetrest_external_port }}"
+
   - name: Verifier si le firewall est actif
     command: systemctl status firewalld
     ignore_errors: yes
