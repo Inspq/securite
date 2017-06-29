@@ -37,7 +37,7 @@
       ports:
       - "{{ sx5javarestoidc_external_port }}:{{ sx5javarestoidc_internal_port }}"
       env:
-        "OPENAM_URL": "{{openam_url}}"
+        "OPENAM_URL": "{{ openid_base_url }}"
         "OIDC_CLIENT_ID": "{{sx5javarestoidc_oidc_client_id}}"
         "OIDC_CLIENT_SECRET": "{{sx5javarestoidc_oidc_client_secret}}"
         "OIDC_REDIRECT_URI": "{{sx5javarestoidc_oidc_redirect_uri}}"
