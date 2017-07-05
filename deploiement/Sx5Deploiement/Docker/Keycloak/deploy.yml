@@ -84,8 +84,8 @@
         username: "{{ keycloak_user }}"
         password: "{{ keycloak_password }}"
         state : present
-      register: realm
       
     - name: Afficher le realm
-      debug: var = realm
+      debug: 
+        var: realm
       
