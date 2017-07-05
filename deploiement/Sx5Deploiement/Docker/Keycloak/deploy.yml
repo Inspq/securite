@@ -87,5 +87,5 @@
       register: realm
       
     - name: Afficher le realm
-      debug: vr = realm
+      debug: var = realm
       
