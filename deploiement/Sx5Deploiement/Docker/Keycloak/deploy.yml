@@ -86,3 +86,6 @@
         state : present
       register: realm
       
+    - name: Afficher le realm
+      debug: vr = realm
+      
