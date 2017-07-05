@@ -85,4 +85,4 @@
         password: "{{ keycloak_password }}"
         state : present
       register: realm
-      delegate_to: localhost
+      
