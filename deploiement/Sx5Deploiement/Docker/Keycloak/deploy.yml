@@ -83,6 +83,7 @@
         url: "{{ keycloak_url }}"
         username: "{{ keycloak_user }}"
         password: "{{ keycloak_password }}"
+        smtpServer: "{{ keycloak_smtpserver }}"
         state : present
       
     - name: Afficher le realm
