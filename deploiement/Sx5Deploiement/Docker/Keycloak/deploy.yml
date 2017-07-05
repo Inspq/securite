@@ -68,12 +68,12 @@
           
     - name: Attendre que le serveur keycloak soit disponible
       uri:
-        url: "{{ keycloak_url }}"
+        url: "{{ keycloak_url }}/auth/admin/"
         status_code: 200
       register: result
       until: result.status == 200
-      retries: 60
-      delay: 1
+      retries: 6
+      delay: 10
       
     - name: Creer le REALM
       keycloak_realm:
