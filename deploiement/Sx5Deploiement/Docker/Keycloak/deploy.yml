@@ -35,11 +35,14 @@
     - name: Créer le groupe
       group:
         name: "{{ app_group }}"
+        #gid: "{{ app_group_id }}"
         state: present
         
     - name: Créer l'usager
       user: 
         name: "{{ app_user }}"
+        uid: "{{ app_user_id }}"
+        non_unique: true
         group: "{{ app_group }}"
         state: present
         
