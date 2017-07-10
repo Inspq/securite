@@ -1,5 +1,5 @@
 ---
-- hosts: idm
+- hosts: gia
   vars:
     app: keycloak
     docker_image: jboss/keycloak
