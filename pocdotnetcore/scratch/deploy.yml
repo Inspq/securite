@@ -47,12 +47,6 @@
       sx5dotnetuioidc_oidc_client_secret: "{{keycloak_client.ansible_facts.clientSecret.value}}"
     when:  keycloak_client is defined
 
-  - name: afficher client
-    debug: var=keycloak_client
-
-  - name: afficher secret
-    debug: var=sx5dotnetuioidc_oidc_client_secret
-
   - name: Creation du conteneur pour sx5dotnetuioidc 
     docker_container:
       name: "{{ sx5dotnetuioidc_container_name }}"
