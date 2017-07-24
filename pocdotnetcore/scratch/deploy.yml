@@ -46,6 +46,12 @@
     set_fact:
       sx5dotnetuioidc_oidc_client_secret: "{{keycloak_client.ansible_facts.clientSecret.value}}"
     when:  keycloak_client is defined
+    
+  - name: afficher client
+    debug: keycloak_client
+
+  - name: afficher secret
+    debug: sx5dotnetuioidc_oidc_client_secret
 
   - name: Creation du conteneur pour sx5dotnetuioidc 
     docker_container:
