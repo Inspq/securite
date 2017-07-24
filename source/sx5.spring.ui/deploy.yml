@@ -62,7 +62,7 @@
         "OPENAM_URL": "{{ openid_base_url }}"
         "OIDC_CLIENT_ID": "{{sx5javauioidc_oidc_client_id}}"
         "OIDC_CLIENT_SECRET": "{{sx5javauioidc_oidc_client_secret}}"
-        "OIDC_REDIRECT_URI": "{{sx5javauioidc_oidc_redirect_uri.0}}"
+        "OIDC_REDIRECT_URI": "{{sx5javauioidc_oidc_client_redirectUris.0}}"
         "CATALINA_OPTS": "-Djava.security.egd=file:/dev/./urandom -Dsx5.oid.url={{ openid_base_url }} -Dsecurity.oauth2.client.accessTokenUri={{ token_endpoint }} -Dsecurity.oauth2.client.userAuthorizationUri={{ authorization_endpoint }} -Dsecurity.oauth2.resource.userInfoUri={{ userinfo_endpoint }} -Dsecurity.oauth2.client.logoutUri={{ end_session_endpoint }} -DOIDC_CLIENT_ID={{sx5javauioidc_oidc_client_id}} -DOIDC_CLIENT_SECRET={{sx5javauioidc_oidc_client_secret}} -DOIDC_REDIRECT_URI={{sx5javauioidc_oidc_redirect_uri}} -DSERVER_PORT={{sx5javauioidc_internal_port}}"
 
   - name: Verifier si le firewall est actif
