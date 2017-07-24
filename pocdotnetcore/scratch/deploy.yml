@@ -15,7 +15,7 @@
     when: docker_registry_username is defined and docker_registry_password is defined and docker_registry_email is defined
 
   - name: Suppression du conteneur pour sx5dotnetuioidc 
-    docker:
+    docker_container:
       name: "{{ sx5dotnetuioidc_container_name }}"
       image: "{{ sx5dotnetuioidc_docker_image }}:{{ sx5dotnetuioidc_image_version }}"
       state: absent
@@ -27,6 +27,7 @@
       pull: true
       state: present
       force: yes
+      
   - name: Créer ou mettre à jour le client dans Keycloak et obtenir le clientSecret
     keycloak_client:
       url: "{{ keycloak_url }}"
