@@ -29,7 +29,7 @@
       force: yes
   - name: Créer ou mettre à jour le client dans Keycloak et obtenir le clientSecret
     keycloak_client:
-      url: "{{ keycloak_url }}
+      url: "{{ keycloak_url }}"
       username: "{{keycloak_user }}"
       password: "{{ keycloak_password }}"
       realm: "{{ keycloak_realm }}"
