@@ -27,7 +27,7 @@
       pull: true
       state: present
       force: yes
-      
+
   - name: Créer ou mettre à jour le client dans Keycloak et obtenir le clientSecret
     keycloak_client:
       url: "{{ keycloak_url }}"
@@ -44,7 +44,7 @@
 
   - name: Configurer le clientSecret
     set_fact:
-      sx5dotnetuioidc_oidc_client_secret: "{{keycloak_client.results.ansible_facts.clientSecret.value}}"
+      sx5dotnetuioidc_oidc_client_secret: "{{keycloak_client.ansible_facts.clientSecret.value}}"
     when:  keycloak_client is defined
 
   - name: Creation du conteneur pour sx5dotnetuioidc 
