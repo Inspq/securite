@@ -27,7 +27,26 @@
       pull: true
       state: present
       force: yes
-      
+
+  - name: Créer ou mettre à jour le client dans Keycloak et obtenir le clientSecret
+    keycloak_client:
+      url: "{{ keycloak_url }}"
+      username: "{{keycloak_user }}"
+      password: "{{ keycloak_password }}"
+      realm: "{{ keycloak_realm }}"
+      clientId: "{{ sx5javauioidc_oidc_client_id }}"
+      name: "{{ sx5javauioidc_oidc_client_name }}"
+      description: "{{ sx5javauioidc_oidc_client_description }}"
+      redirectUris : "{{ sx5javauioidc_oidc_client_redirectUris }}"
+      webOrigins: "{{ sx5javauioidc_oidc_client_weborigins }}"
+    register: keycloak_client
+    when:  keycloak_url is defined
+
+  - name: Configurer le clientSecret
+    set_fact:
+      sx5javauioidc_oidc_client_secret: "{{keycloak_client.ansible_facts.clientSecret.value}}"
+    when:  keycloak_client is defined
+          
   - name: Creation du conteneur pour {{ sx5javarestoidc_container_name }} 
     docker_container:
       name: "{{ sx5javarestoidc_container_name }}"
@@ -40,7 +59,7 @@
         "OPENAM_URL": "{{ openid_base_url }}"
         "OIDC_CLIENT_ID": "{{sx5javarestoidc_oidc_client_id}}"
         "OIDC_CLIENT_SECRET": "{{sx5javarestoidc_oidc_client_secret}}"
-        "OIDC_REDIRECT_URI": "{{sx5javarestoidc_oidc_redirect_uri}}"
+        "OIDC_REDIRECT_URI": "{{sx5javauioidc_oidc_client_redirectUris.0}}"
         "CATALINA_OPTS": "-Djava.security.egd=file:/dev/./urandom -Dsecurity.jwt.jwks_uri={{ jwks_uri }} -DOPENAM_URL={{openid_base_url}} -DOIDC_CLIENT_ID={{sx5javarestoidc_oidc_client_id}} -DOIDC_CLIENT_SECRET={{sx5javarestoidc_oidc_client_secret}} -DOIDC_REDIRECT_URI={{sx5javarestoidc_oidc_redirect_uri}} -DSERVER_PORT={{sx5javarestoidc_internal_port}}"
 
   - name: Verifier si le firewall est actif
